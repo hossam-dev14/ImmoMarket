@@ -4,12 +4,15 @@ import connectMongoDB from "./config/database.js";
 import authRouter from "./routes/auth.route.js";
 
 import dotenv from 'dotenv';
-
+import errorHandler from "./middleware/errorHandler.js";
 
 // Loading environment variables from .env file
 dotenv.config();
 
+// Initialize the express app
 const app = express();
+
+// Set the port of our application
 const port = process.env.PORT || 8080;
 
 // Connect to mongodb
@@ -21,16 +24,11 @@ app.use(express.json());
 // Log requests to the console
 app.use(morgan('tiny'));
 
-// -------------- Test ------------------- //
-// ------ Define routes for products
-app.get('/api/test', (req, res) => {
-  res.send(data);
-  console.log(data);
-});
-
+// Use the '/api/auth' endpoint for the authRouter
 app.use('/api/auth', authRouter);
 
-
+// Middleware form Handling Error
+app.use('/api/auth', errorHandler);
 
 // Define Property schema
 // const PropertySchema = new mongoose.Schema({
@@ -57,7 +55,14 @@ app.use('/api/auth', authRouter);
 //   }
 // });
 
-app.listen(port, function(err){
-  console.log(`Server is Run on ${"http://localhost:" + port}`);
+// Start the server.
+app.listen(port, function(err) {
+  // If an error occurs, log the error message to the console.
+  if(err) {
+    console.error(`Server failed to start on ${"http://localhost:" + port} owen to: ${err.message}`);
+  } else {
+    // If no error occurs, log a message indicating the server is running.
+    console.log(`Server is Running on ${"http://localhost:" + port}`);
+  }
 })
 
