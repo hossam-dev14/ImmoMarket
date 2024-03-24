@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 const MIN_NAME_LENGTH = 3;
 const MAX_NAME_LENGTH = 50;
 const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 100;
+const MAX_PASSWORD_LENGTH = 70;
 
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true, min: MIN_NAME_LENGTH, max: MAX_NAME_LENGTH },
