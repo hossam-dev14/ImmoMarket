@@ -7,12 +7,13 @@ const secret = process.env.JWT_SECRET;
 
 export const signUp = async (req, res, next) => {
   const {username, email, phone, password, confirmPassword} = req.body;
-  
+
   // Throw a custom error if any required field is missing
   if(!username || !email || !phone || !password || !confirmPassword) {
     return next(createError(400, 'All fields are required!'))
   }
 
+  // Throw a custom error if the confirmed password don't match
   if (password !== confirmPassword) {
     return next(createError(400, 'Passwords do not match!'));
   }
@@ -33,7 +34,7 @@ export const signUp = async (req, res, next) => {
     
     res.
       status(201).
-      json({ message: 'User created successfully', newUser });
+      json({ message: 'User created successfully' });
   } catch (error) {
     next(error);
     // res.status(500).json({ error: 'User creation failed' });
@@ -46,7 +47,7 @@ export const signIn = async (req, res, next) => {
   
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({message: 'User not found!'});
+    if (!user) return next(createError(404, 'User not found!'));
     
     // Compare user's entered password with the stored hash
     const comparingPassword = await bcrypt.compare(password, user.password);
@@ -57,16 +58,20 @@ export const signIn = async (req, res, next) => {
       secret,
       {expiresIn: '1d'}
     );
+    // Make username to uppercase
+    const userName = user.username;
+    // Return only the necessary information for the client side
+    const { password: pass, ...rest } = user._doc;
 
+    // Set the cookie
     res.cookie(
-        'access_token', 
+        'access_token',   
         token, 
         { httpOnly: true }
       ).
       status(200).
       header('Authonrization', `Bearer ${token}`).
-      json({message: `Welcome ${user.username} to your account!`});
-
+      json({message: `Welcome ${userName.toUpperCase()} to your account!`, data: rest});
   } catch (error) {
     next(error)
   }
