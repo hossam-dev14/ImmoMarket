@@ -1,8 +1,47 @@
-// import React from 'react'
+import React from 'react'
 
+import { useState } from "react";
 import Layout from "../../Layout";
+import { useNavigate } from "react-router-dom";
 
 export default function SignIn() {
+  const [userInfo, setUserInfo] = useState({});
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+
+  const handleChange = (e) => {
+    setUserInfo({ 
+      ...userInfo, 
+      [e.target.id]: e.target.value 
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(userInfo)
+      });
+      const data = await res.json();
+      if(data.error) {
+        setLoading(false);
+        setError(data.error);
+        return;
+      }
+      setLoading(false);
+      setError(null);
+      console.log(data);
+      navigate('/')
+    } catch(error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <Layout>
       <main>
@@ -13,16 +52,14 @@ export default function SignIn() {
                 <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg bg-white border-0">
                   <div className="rounded-t mb-0 px-6 py-6">
                     <div className="text-center mb-3">
-                      <h6 className="text-secondary text-lg font-bold">
+                      <strong className="text-secondary text-lg font-bold">
                         Sign In
-                      </h6>
+                      </strong>
                     </div>
-
                     <hr className="mt-6 border-b-1 border-gray-300" />
                   </div>
                   <div className="flex-auto px-6 lg:px-10 py-6 pt-0">
-                    
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="relative w-full mb-3">
                         <label
                           className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -33,7 +70,12 @@ export default function SignIn() {
                           type="email"
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Email"
-                          style={{ transition: "all .15s ease" }}/>
+                          style={{ transition: "all .15s ease" }}
+                          id="email"
+                          onChange={handleChange}
+                          autoComplete='email'
+                          required
+                          />
                       </div>
 
                       <div className="relative w-full mb-3">
@@ -46,15 +88,27 @@ export default function SignIn() {
                           type="password"
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Password"
-                          style={{ transition: "all .15s ease" }}/>
+                          style={{ transition: "all .15s ease" }}
+                          id='password'
+                          onChange={handleChange}
+                          autoComplete="current-password"
+                          required/>
                       </div>
-
+                      {/* Error */}
+                      <div className="">
+                        {error && 
+                          <p className="text-red-500 w-full bg-red p-2 rounded-md transition-all duration-500">
+                            {error.message}
+                          </p>
+                        } 
+                      </div> 
                       <div className="text-center mt-10">
                         <button
+                          disabled={loading}
                           className="bg-secondary text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                          type="button"
+                          type="submit"
                           style={{ transition: "all .15s ease" }}>
-                          Sign In
+                          { loading ? 'Loading...' : 'Sign In'}
                         </button>
                       </div>
                     </form>

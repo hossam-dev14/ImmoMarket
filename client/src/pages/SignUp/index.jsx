@@ -1,9 +1,45 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import Layout from '../../Layout'
+import { useState } from 'react';
+import Layout from '../../Layout';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function SignUp() {
+  const [userInfo, setUserInfo] = useState({});
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setUserInfo({
+      ...userInfo,
+      [e.target.id]: e.target.value,
+    });
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(userInfo)
+      });
+      const data = await res.json();
+      if(data.error) {
+        setLoading(false);
+        setError(data.error);
+        return;
+      }
+      setLoading(false);
+      setError(null)
+      navigate('/signin')
+    } catch(error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <Layout>
       <main>
@@ -18,44 +54,13 @@ export default function SignUp() {
                         Sign Up
                       </h6>
                     </div>
-                    {/* Signin With Google or Github */}
-                    {/* <div className="btn-wrapper text-center">
-                      <button
-                        className="bg-white active:bg-gray-100 text-gray-800 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs"
-                        type="button"
-                        style={{ transition: "all .15s ease" }}
-                      >
-                        <img
-                          alt="..."
-                          className="w-5 mr-1"
-                          // src={require("assets/img/github.svg").default}
-                        />
-                        Github
-                      </button>
-                      <button
-                        className="bg-white active:bg-gray-100 text-gray-800 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs"
-                        type="button"
-                        style={{ transition: "all .15s ease" }}
-                      >
-                        <img
-                          alt="..."
-                          className="w-5 mr-1"
-                          // src={require("assets/img/google.svg").default}
-                        />
-                        Google
-                      </button>
-                    </div> */}
                     <hr className="mt-6 border-b-1 border-gray-400" />
                   </div>
                   <div className="flex-auto px-6 lg:px-10 py-10 pt-0">
-                    {/* <div className="text-gray-500 text-center mb-3 font-bold">
-                      <small>Or sign in with credentials</small>
-                    </div> */}
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="relative w-full mb-3">
                         <label
-                          className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        >
+                          className="block uppercase text-gray-700 text-xs font-bold mb-2">
                           username
                         </label>
                         <input
@@ -63,6 +68,9 @@ export default function SignUp() {
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Username"
                           style={{ transition: "all .15s ease" }}
+                          id="username"
+                          onChange={handleChange}
+                          autoComplete='username'
                         />
                       </div>
 
@@ -77,6 +85,9 @@ export default function SignUp() {
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Email"
                           style={{ transition: "all .15s ease" }}
+                          id="email"
+                          onChange={handleChange}
+                          autoComplete='email'
                         />
                       </div>
                       <div className="relative w-full mb-3">
@@ -90,13 +101,14 @@ export default function SignUp() {
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Phone number"
                           style={{ transition: "all .15s ease" }}
-                        />
+                          id='phone'
+                          onChange={handleChange}
+                          autoComplete='numder'/>
                       </div>
                       <div className="relative w-full mb-3">
                         <label
                           className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                          htmlFor="grid-password"
-                        >
+                          htmlFor="grid-password">
                           Password
                         </label>
                         <input
@@ -104,14 +116,15 @@ export default function SignUp() {
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Password"
                           style={{ transition: "all .15s ease" }}
-                        />
+                          id='password'
+                          onChange={handleChange}
+                          autoComplete='new-password'/>
                       </div>
 
                       <div className="relative w-full mb-3">
                         <label
                           className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                          htmlFor="grid-password"
-                        >
+                          htmlFor="grid-password" >
                           confirm Password
                         </label>
                         <input
@@ -119,16 +132,25 @@ export default function SignUp() {
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Confirm Password"
                           style={{ transition: "all .15s ease" }}
-                        />
+                          id='confirmPassword'
+                          onChange={handleChange}
+                          autoComplete='new-password' />
                       </div>
-                      
+                      {/* Error */}
+                      <div className="">
+                        {error && 
+                          <p className="text-red-500 w-full bg-red p-2 rounded-md transition-all duration-500">
+                            {error.message}
+                          </p>
+                        } 
+                      </div>
                       <div className="text-center mt-10">
                         <button
+                          disabled={loading}
                           className="bg-secondary text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                          type="button"
-                          style={{ transition: "all .15s ease" }}
-                        >
-                          Sign Up
+                          type="submit"
+                          style={{ transition: "all .15s ease" }} >
+                          { loading ? 'Loading...' : 'Sign Up'}
                         </button>
                       </div>
                     </form>
@@ -139,8 +161,7 @@ export default function SignUp() {
                         <a
                           href="#"
                           onClick={e => e.preventDefault()}
-                          className="text-blue-500 hover:text-blue-400"
-                        >
+                          className="text-blue-500 hover:text-blue-400">
                           <small>Have an account?</small>
                         </a>
                       </div>
