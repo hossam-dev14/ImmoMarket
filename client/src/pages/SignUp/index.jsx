@@ -1,42 +1,55 @@
-import React from 'react'
+// import React from 'react'
 import { useState } from 'react';
 import Layout from '../../Layout';
-import { useNavigate } from 'react-router-dom';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import {useSignUpUserMutation} from '../../store/user/apiSlice';
+import { signUp } from '../../store/user/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
+const options = {
+  position: "top-center",
+  autoClose: 1500,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  className: "bg-slate-100 text-secondary"
+};
 
 export default function SignUp() {
-  const [userInfo, setUserInfo] = useState({});
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({});
+  const { userInfo } = useSelector((state) => state.auth);
+  const [signup, {isLoading}] = useSignUpUserMutation();
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  console.log(userInfo);
+  
+  const togglePassword = () => setPasswordShown(!passwordShown);
 
   const handleChange = (e) => {
-    setUserInfo({
-      ...userInfo,
-      [e.target.id]: e.target.value,
-    });
+    setFormData({
+      ...formData, 
+      [e.target.id]: e.target.value
+    })
   };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify(userInfo)
-      });
-      const data = await res.json();
-      if(data.error) {
-        setLoading(false);
-        setError(data.error);
-        return;
-      }
-      setLoading(false);
-      setError(null)
-      navigate('/signin')
-    } catch(error) {
-      setError(error.message);
+      const res = await signup(formData).unwrap();
+      dispatch(signUp({res}));
+      toast.success(res.message, options);
+      navigate('/signin');
+
+    } catch(err) {
+      console.error(err);
+      toast.error(err.data.error.message, options);
     }
   };
 
@@ -112,13 +125,18 @@ export default function SignUp() {
                           Password
                         </label>
                         <input
-                          type="password"
+                          type={passwordShown ? 'text' : 'password'}
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Password"
                           style={{ transition: "all .15s ease" }}
                           id='password'
                           onChange={handleChange}
                           autoComplete='new-password'/>
+                          <span
+                            onClick={togglePassword}
+                            className='text-gray-700 text-2xl absolute right-3 top-[53%] '>
+                            {passwordShown ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                          </span>
                       </div>
 
                       <div className="relative w-full mb-3">
@@ -128,7 +146,7 @@ export default function SignUp() {
                           confirm Password
                         </label>
                         <input
-                          type="password"
+                          type={passwordShown ? 'text' : 'password'}
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Confirm Password"
                           style={{ transition: "all .15s ease" }}
@@ -137,20 +155,20 @@ export default function SignUp() {
                           autoComplete='new-password' />
                       </div>
                       {/* Error */}
-                      <div className="">
+                      {/* <div className="">
                         {error && 
                           <p className="text-red-500 w-full bg-red p-2 rounded-md transition-all duration-500">
                             {error.message}
                           </p>
                         } 
-                      </div>
+                      </div> */}
                       <div className="text-center mt-10">
                         <button
-                          disabled={loading}
+                          disabled={isLoading}
                           className="bg-secondary text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                           type="submit"
                           style={{ transition: "all .15s ease" }} >
-                          { loading ? 'Loading...' : 'Sign Up'}
+                          { isLoading ? 'Loading...' : 'Sign Up'}
                         </button>
                       </div>
                     </form>
@@ -158,12 +176,10 @@ export default function SignUp() {
                       <div className="w-1/2">
                       </div>
                       <div className="w-1/2 text-right">
-                        <a
-                          href="#"
-                          onClick={e => e.preventDefault()}
+                        <Link to="/signin"
                           className="text-blue-500 hover:text-blue-400">
                           <small>Have an account?</small>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>

@@ -1,46 +1,61 @@
-import React from 'react'
-
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import Layout from "../../Layout";
-import { useNavigate } from "react-router-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { Link, useNavigate } from "react-router-dom";
+import {useSignInUserMutation} from '../../store/user/apiSlice';
+import { signIn } from '../../store/user/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+const options = {
+  position: "top-center",
+  autoClose: 1500,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  className: "bg-slate-100 text-secondary"
+};
 
 export default function SignIn() {
-  const [userInfo, setUserInfo] = useState({});
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [signin, {isLoading}] = useSignInUserMutation();
+  const { userInfo } = useSelector((state) => state.auth);
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-
+  
+  const togglePassword = () => setPasswordShown(!passwordShown);
+  console.log('Data: ' + formData);
+  
   const handleChange = (e) => {
-    setUserInfo({ 
-      ...userInfo, 
-      [e.target.id]: e.target.value 
-    });
+    setFormData({
+      ...formData, 
+      [e.target.id]: e.target.value
+    })
   };
-
-  const handleSubmit = async (e) => {
+  
+  const handleSubmit = async (e) =>{
     e.preventDefault();
-    try {
-      setLoading(true);
-      const res = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify(userInfo)
-      });
-      const data = await res.json();
-      if(data.error) {
-        setLoading(false);
-        setError(data.error);
-        return;
-      }
-      setLoading(false);
-      setError(null);
-      console.log(data);
-      navigate('/')
-    } catch(error) {
-      setError(error.message);
-    }
+    try{
+      const res = await signin(formData).unwrap();
+      dispatch(signIn({res}));
+      // navigate('/');
+      toast.success(res.message, options);
+    } catch (err) {
+      toast.error(err.data.error.message, options);
+    } 
   };
+  
+  // Redirect if user is already logged in
+  useEffect(()=>{
+    if (userInfo){
+      // navigate('/dashboard');
+      navigate('/profile');
+    }
+  },[navigate, userInfo]);
 
   return (
     <Layout>
@@ -66,7 +81,7 @@ export default function SignIn() {
                           htmlFor="grid-password">
                           Email
                         </label>
-                        <input
+                        <input 
                           type="email"
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Email"
@@ -78,14 +93,14 @@ export default function SignIn() {
                           />
                       </div>
 
-                      <div className="relative w-full mb-3">
+                      <div className="relative w-full mb-3 items-center">
                         <label
                           className="block uppercase text-gray-700 text-xs font-bold mb-2"
                           htmlFor="grid-password">
                           Password
                         </label>
                         <input
-                          type="password"
+                          type={passwordShown ? 'text' : 'password'}
                           className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Password"
                           style={{ transition: "all .15s ease" }}
@@ -93,22 +108,25 @@ export default function SignIn() {
                           onChange={handleChange}
                           autoComplete="current-password"
                           required/>
+                          <span
+                            onClick={togglePassword}
+                            className='text-gray-700 text-2xl absolute right-3 top-[53%] '>
+                            {passwordShown ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                          </span>
                       </div>
+
                       {/* Error */}
-                      <div className="">
-                        {error && 
-                          <p className="text-red-500 w-full bg-red p-2 rounded-md transition-all duration-500">
-                            {error.message}
-                          </p>
-                        } 
-                      </div> 
-                      <div className="text-center mt-10">
+                      <span className="text-red-500 w-full bg-red p-2 rounded-md transition-all duration-500">
+                        {}
+                      </span>
+
+                      <div className="text-center mt-3">
                         <button
-                          disabled={loading}
+                          disabled={isLoading}
                           className="bg-secondary text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                           type="submit"
                           style={{ transition: "all .15s ease" }}>
-                          { loading ? 'Loading...' : 'Sign In'}
+                          { isLoading ? 'Loading...' : 'Sign In'}
                         </button>
                       </div>
                     </form>
@@ -122,12 +140,10 @@ export default function SignIn() {
                         </a>
                       </div>
                       <div className="w-1/2 text-right">
-                        <a
-                          href="#"
-                          onClick={e => e.preventDefault()}
+                        <Link to="/signup"
                           className="text-blue-500 hover:text-blue-400">
                           <small>Create new account</small>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -140,4 +156,3 @@ export default function SignIn() {
     </Layout>
   )
 }
-
