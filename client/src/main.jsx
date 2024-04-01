@@ -1,10 +1,20 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import { createRoot } from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
+import store from './store';
+import { Provider } from 'react-redux';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+// import { ApiProvider } from '@reduxjs/toolkit/query/react';
+// import { usersApi } from './store/user/apiSlice.js';
+
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
+  <Provider store={store}>
+    {/* <ApiProvider api={usersApi}> */}
+      <App />
+    {/* </ApiProvider> */}
+  </Provider>
 )
