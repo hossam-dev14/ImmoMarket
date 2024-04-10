@@ -6,20 +6,19 @@ import {
   deleteUser, 
   updateUser,
   getUsers,
-  getUser,
+  getUserDetails,
 } from '../controllers/user.controler.js';
-import authMiddleware from '../middleware/authMiddleware.js';
+import {isAuthenticated} from '../middleware/auth.middleware.js';
 
 
 const router = express.Router();
 
-router.get('/', authMiddleware, getUsers);
+router.get('/', isAuthenticated, getUsers);
 
-// router.get(('/profile'), authMiddleware, getUser);
 router.
   route('/profile').
-  get(authMiddleware, getUser). 
-  put(authMiddleware, updateUser);
+  get(isAuthenticated, getUserDetails).
+  put(isAuthenticated, updateUser);
 
 router.delete('/:id', deleteUser);
 // router.post('/dashboard', verifyToken, dashdoard)

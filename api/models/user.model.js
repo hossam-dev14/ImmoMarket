@@ -13,7 +13,14 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   phone: { type: Number, optional: true, unique: true },
   password: { type: String, required: true, min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH },
-  confirmPassword: { type: String, optional: true, min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH }
+  confirmPassword: { type: String, optional: true, min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH },
+  refreshToken: { type: String, required: true }, // Store the refresh token
+  profilePhoto: {
+    type: String,
+    default: "https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg"
+  },
+  // agent: { type: Schema.Types.ObjectId, ref: 'Agent' }
+  // properties: [{ type: Schema.Types.ObjectId, ref: 'Property' }]
 }, { timestamps: true });
 
 // Joi schema for user validation
@@ -23,7 +30,8 @@ const userValidation = Joi.object({
   phone: Joi.number().optional().integer().positive(),
   password: Joi.string().required().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
   confirmPassword: Joi.string().required().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH)
-});
+})
+
 
 // Hash the user's password before saving it
 userSchema.pre('save', async function (next) {
@@ -38,6 +46,3 @@ userSchema.pre('save', async function (next) {
 
 export default mongoose.model('User', userSchema);
 export { userValidation };
-
-
-// module.exports = mongoose.model('User', userSchema);
