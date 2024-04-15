@@ -7,13 +7,12 @@ const PropertySchema = new mongoose.Schema({
   price: {type: Number, required: true},
   listingType: {type: String , enum: ['apartments', 'houses', 'offices']},
   category: {type: String , enum: ['rent', 'sell']}, // for rent or sell
-  area: {type: Number},
+  furnished: {type: Boolean, required: true},
   parking: {type: Boolean, required: true},
-  imageUrls: {type: Array, required: true},
-  bedrooms: { type: Number },
-  bathrooms: { type: Number },
-  ownerId: { type: String, required: true },
-  // ownerId: { type: mongoose.Types.ObjectId, ref: 'User', required: true }
+  imageUrls: {type: String, required: true},
+  bedrooms: {type: Number},
+  bathrooms: {type: Number},
+  ownerId: {type: mongoose.Types.ObjectId, ref: 'User', required: true}
 }, {timestamps: true });
 
 export default mongoose.model('Property', PropertySchema);
