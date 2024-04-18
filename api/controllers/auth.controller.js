@@ -5,13 +5,25 @@ import createError from '../helpers/createError.js';
 const access_secret = process.env.ACCESS_SECRET;
 const refresh_secret = process.env.REFRESH_SECRET;
 
+// Sign up
 export const signUp = async (req, res, next) => {
-  const {username, email, phone, password, confirmPassword} = req.body;
+  const {username, email, phone, avatar, password, confirmPassword} = req.body;
 
   // Throw a custom error if any required field is missing
   if(!username || !email || !phone || !password || !confirmPassword) {
     return next(createError(400, 'All fields are required!'))
   }
+
+  const file = req.file;
+  if (!file) return next(createError(400, 'No image in the request'));
+
+  const fileName = file.filename;
+  const basePath = `${req.protocol}://${req.get('host')}/images/`;
+
+    
+  // Generate profile image URL using UI Avatars API
+  const profileImage = `https://ui-avatars.com/api/?background=random&rounded=true&name=${username}`;
+
 
   // Throw a custom error if the confirmed password don't match
   if (password !== confirmPassword) {
@@ -28,25 +40,28 @@ export const signUp = async (req, res, next) => {
     if(userExist) return next(createError(409, 'This user already exist!'));
 
     // Create the new user
-    const newUser = new User({ username, email, phone, password });
+    const newUser = new User({ 
+      username, email, phone, password, avatar: `${basePath}${fileName}`,
+    });
+
     await newUser.save();
     
     res.
       status(201).
       json({ message: 'User created successfully' });
   } catch (error) {
+    console.log(error.message);
     next(error);
-    res.status(500).json({ error: 'User creation failed' });
-    // console.log(error);
   }
 }
 
+// Sign in
 export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
   if(!email || !password) 
   return next(createError(400, 'Email and password are required.')); 
 
-try {
+  try {
     const user = await User.findOne({ email });
     if (!user) return next(createError(404, 'User not found!'));
     
@@ -101,14 +116,16 @@ const genRefreshToken = (user)=> {
 )};
 
 // Route to get a new access token using the refresh token
-export const getAccessToken = ((req, res) => {
+export const getAccessToken = async (req, res) => {
   const accessToken = jwt.sign(
-    { userId: req.userId }, 
-    access_secret, 
-    { expiresIn: '1h' });
-  res.header('Authorization', `Bearer ${accessToken}`)
-     .json({ accessToken });
-});
+    { userId: req.userId },
+    access_secret,
+    { expiresIn: '1h' }
+  );
+  res
+    .header('Authorization', `Bearer ${accessToken}`)
+    .json({ accessToken });
+};
 
 // Handle Signout
 export const signOut = async (req, res, next) => {
@@ -133,22 +150,4 @@ export const signOut = async (req, res, next) => {
     next(error);
   }
 };
-
-
-// export const refreshToken = async (req, res) => {
-//   const { refreshToken } = req.body;
-//   if (!refreshToken) return res.sendStatus(401);
-
-//   try {
-//     const user = await User.findOne({ refreshToken } );
-//     if (!user) return res.sendStatus(403);
-
-//     const accessToken = genAccessToken(user);
-//     res.json({ accessToken });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
-
 

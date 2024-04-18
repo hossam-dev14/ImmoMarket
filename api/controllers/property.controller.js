@@ -3,45 +3,44 @@ import createError from '../helpers/createError.js';
 
 // Add property
 export const addProperty = async (req, res, next) => {
-  const { 
-    title, 
-    description, 
-    address, 
-    price, 
-    listingType, 
-    category,
-    furnished,
-    parking, 
-    imageUrls, 
-    bedrooms, 
-    bathrooms
+  const { title, description, address, price, listingType, 
+    category, bedrooms, bathrooms, furnished, parking
   } = req.body;
 
-  const ownerId = req.user;
-  if(!ownerId) return next(createError(404, "Owner not found"));
-  
   try {
+    // // Ensure that all required fields are provided
+    if (!title || !description || !address || !price || !listingType || !category || !bedrooms || !bathrooms) {
+      return next(createError(400, "Please provide all required fields."));
+    }
+    
+    const file = req.file;
+    if (!file) return next(createError(400, 'No image in the request'));
+    
+    const fileName = file.filename;
+    const basePath = `${req.protocol}://${req.get('host')}/images/`;
+
+    // Ensure that ownerId is present in the request (assuming it's populated by middleware)
+    const ownerId = req.user;
+    if (!ownerId) {
+      return next(createError(404, "Owner not found"));
+    }
+
     // Create a new property
     const newProperty = await Property.create({
       title,
       description,
       address,
       price,
-      listingType,
+      listingType, 
       category,
       furnished,
       parking,
-      imageUrls,
       bedrooms,
       bathrooms,
+      imageUrl: `${basePath}${fileName}`,
       ownerId
     });
-    
-    // const newProperty = await Property.create({ 
-    //   ...req.body, 
-    //   ownerId: req.user
-    // });
-
+  
     res.status(201).json({ 
       message: 'Property added successfully', 
       newProperty 
@@ -69,7 +68,7 @@ export const getProperty = async (req, res, next) => {
 
 // Retrieve all properties
 export const getAllProperties = async (req, res, next) => {
-  try {
+  try { 
     const properties = await Property.find().populate('ownerId', '-password');
     //populates the ownerId field to include the user details associated with each property.
     res.status(200).json(properties);
@@ -111,7 +110,7 @@ export const updateProperty = async (req, res, next) => {
     if (!property) {
       return res.status(404).json({ error: 'Property not found!' });
     }
-        
+
     console.log(property.ownerId.toString());
     
     // Check if the user is authorized to update the property
