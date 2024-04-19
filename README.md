@@ -40,18 +40,17 @@ ImmoMarket is a dynamic real estate marketplace for real estate advertisements a
 ## Getting Started
 
 1.Clone the repository:
-```bash
-  git clone https://github.com/hossam-dev14/ImmoMarket.git
-  cd immomarket
-```
+  ```bash
+    git clone https://github.com/hossam-dev14/ImmoMarket.git
+    cd immomarket
+  ```
 2.Install dependencies for both the frontend and backend:
-
-```bash
-  cd client
-  npm install
-  cd api
-  npm install
-```
+  ```bash
+    cd client
+    npm install
+    cd api
+    npm install
+  ```
 
 3.Set up the environment variables:
 * Create a .env file in the backend directory.
@@ -63,16 +62,16 @@ ImmoMarket is a dynamic real estate marketplace for real estate advertisements a
   ```
 
 4. Start the backend server:
-```bash
- cd api
- npm run dev
-```
+  ```bash
+   cd api
+   npm run dev
+  ```
 
 5. Start the frontend development server:
-```bash
- cd client
- npm run dev
-```
+  ```bash
+   cd client
+   npm run dev
+  ```
 
 6. Open your browser and navigate to http://localhost:3000 to view the application.
 
