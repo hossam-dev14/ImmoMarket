@@ -7,33 +7,23 @@ const refresh_secret = process.env.REFRESH_SECRET;
 
 // Sign up
 export const signUp = async (req, res, next) => {
-  const {username, email, phone, avatar, password, confirmPassword} = req.body;
+  const {username, email, phone, password, confirmPassword} = req.body;
 
   // Throw a custom error if any required field is missing
   if(!username || !email || !phone || !password || !confirmPassword) {
     return next(createError(400, 'All fields are required!'))
   }
-
-  const file = req.file;
-  if (!file) return next(createError(400, 'No image in the request'));
-
-  const fileName = file.filename;
-  const basePath = `${req.protocol}://${req.get('host')}/images/`;
-
-    
-  // Generate profile image URL using UI Avatars API
-  const profileImage = `https://ui-avatars.com/api/?background=random&rounded=true&name=${username}`;
-
-
-  // Throw a custom error if the confirmed password don't match
-  if (password !== confirmPassword) {
-    return next(createError(400, 'Passwords do not match!'));
-  }
-
+  
   try {
+    // Throw a custom error if the confirmed password don't match
+    if (password !== confirmPassword) return next(createError(400, 'Passwords do not match!'));
+
     // Validate the user data using Joi
     const {error} = userValidation.validate(req.body);
     if (error) return next(createError(400, error.details[0].message));
+
+    // Generate profile image URL using UI Avatars API
+    const profileImage = `https://ui-avatars.com/api/?background=random&rounded=true&name=${username}`;
 
     // check if username or user email exists in the database
     const userExist = await User.findOne({ email })
@@ -41,7 +31,7 @@ export const signUp = async (req, res, next) => {
 
     // Create the new user
     const newUser = new User({ 
-      username, email, phone, password, avatar: `${basePath}${fileName}`,
+      username, email, phone, password, avatar: profileImage
     });
 
     await newUser.save();
