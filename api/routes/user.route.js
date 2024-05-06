@@ -7,18 +7,20 @@ import {
   updateUser,
   getUsers,
   getUserDetails,
-} from '../controllers/user.controler.js';
+} from '../controllers/user.controller.js';
 import {isAuthenticated} from '../middleware/auth.middleware.js';
-
+import uploadOptions from '../middleware/multer.middleware.js';
 
 const router = express.Router();
 
-router.get('/', isAuthenticated, getUsers);
+// Uploding files
+const uploadImage = uploadOptions.single('avatar');
 
+router.get('/', isAuthenticated, getUsers);
 router.
   route('/profile').
   get(isAuthenticated, getUserDetails).
-  put(isAuthenticated, updateUser);
+  put(isAuthenticated, uploadImage, updateUser);
 
 router.delete('/:id', deleteUser);
 // router.post('/dashboard', verifyToken, dashdoard)

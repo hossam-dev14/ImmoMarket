@@ -12,15 +12,10 @@ import {
   verifyRefreshToken, 
   isAuthenticated 
 } from '../middleware/auth.middleware.js';
-import uploadOptions from '../middleware/multer.middleware.js';
 
 const router = express.Router();
 
-// Uploding files
-const uploadImage = uploadOptions.single('avatar');
-
-
-router.post('/signup', uploadImage, signUp); 
+router.post('/signup', signUp); 
 router.post('/signin', signIn);
 router.post('/refresh-token', verifyRefreshToken, getAccessToken);
 router.post('/signout', signOut);

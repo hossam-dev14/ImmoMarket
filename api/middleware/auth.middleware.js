@@ -9,34 +9,20 @@ const refresh_secret = process.env.REFRESH_SECRET;
 
 // Check if user is authenticated or not
 export function isAuthenticated(req, res, next) {
-  const token = req.headers.authorization?.split(' ')[1]; // split Bearer
-  if(!token) return next(createError(401, 'No token provided'));
+  const authorizationHeader = req.headers.authorization;
   
+  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    return next(createError(401, 'No token provided'));
+  }
+
+  const token = authorizationHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, access_secret);
-    // Store user data in request object
     req.user = decoded.userId;
-    // console.log('User ID: ',req.user);
     next();
   } catch (err) {
-    // If the token is not valid, send a 401 Unauthorized error
-    next(createError(401, "Invalid token!"));
-  };
-}
-
-
-export function authMiddleware(req, res, next) {
-    const token = req.headers.authorization;
-  if (!token) return res.sendStatus(401);
-  try {
-  jwt.verify(token, access_secret, (err, decoded) => {
-      if (err) return res.sendStatus(403);
-      req.user = { userId: decoded.userId };
-      next();
-    });} catch (err) {
-      // If the token is not valid, send a 401 Unauthorized error
-    next(createError(401, "Invalid token!"));
-  };
+    next(createError(401, 'Invalid token'));
+  }
 }
 
 // Middleware to verify the refresh token
@@ -52,7 +38,6 @@ export const verifyRefreshToken = (req, res, next) => {
 };
 
 
-
 // Handling users roles
 // export const authorizeRoles = (...roles) => {
 //   if (!roles.includes(req.user.role)) {
@@ -60,3 +45,4 @@ export const verifyRefreshToken = (req, res, next) => {
 //   }
 //   next();
 // }
+
