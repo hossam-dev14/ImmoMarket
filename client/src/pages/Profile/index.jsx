@@ -1,68 +1,67 @@
-// import React from 'react'
-import { useEffect, useState } from 'react';
-import Layout from '../../Layout';
+import React from 'react'
+import { useEffect, useState, useRef } from 'react';
+import Layout from "../../Layout/DashLayout";
+import { Link, useNavigate 
+} from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast, useToast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateUserMutation } from '../../store/user/apiSlice';
-import {  setUserInfo } from '../../store/user/authSlice';
+import { setUserInfo } from '../../store/user/authSlice';
+// import { legacy_createStore } from '@reduxjs/toolkit';
 
-// define options for toast notifications
-const options = {
-  position: "top-center",
-  autoClose: 1500,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  className: "bg-slate-100 text-secondary"
-};
 
 export default function Profile() {
+  const fileRef = useRef(null);
   const [formData, setFormData] = useState({});
   const {userInfo} = useSelector((state) => state.auth);
   const [passwordShown, setPasswordShown] = useState(false);
-
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imageForDisplay, setImageForDisplay] = useState(false);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
   
-
-  // if (!userInfo) return toast.error('Not logged in!', options); 
-
   const togglePassword = () => setPasswordShown(!passwordShown);
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
+
+  if (!userInfo) return toast.error('Not logged in!'); 
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData, 
-      [e.target.id]: e.target.value
-    })
+    const { name, value, files } = e.target;
+    if (name === 'avatar') {
+      setFormData({
+        ...formData,
+        [name]: files[0]
+      });
+      setImageForDisplay(URL.createObjectURL(files[0]));
+    } else {
+      setFormData({
+        ...formData, 
+        [name]: value
+      });
+    }
   };
-  
-  const handleSubmit = async (e) => {
+
+  console.log(imageForDisplay)
+  console.log(formData)
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       const res = await updateUser(formData).unwrap();
       dispatch(setUserInfo(res));
-      toast.success(res.message, options);
-      navigate('/');
+      // navigate('/my-listing');
+      toast.success(res.message);
     } catch(err) {
-      toast.error(err.message, options);
+      toast.error(err?.data?.error?.message);
     }
   };
 
-
-  useEffect(() => {
-
-    if(!userInfo) return navigate('/signin')
-    console.log(userInfo)
-    
-  },[userInfo, navigate]);
+  // useEffect(() => {
+  //   if(!userInfo) return navigate('/signin');
+  // },[userInfo, navigate]);
   
-
   return (
     <Layout>
       <section className="w-full h-full">
@@ -72,14 +71,32 @@ export default function Profile() {
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg bg-white  border-0">
                 <div className="rounded-t mb-0 px-6 py-6">
                   <div className="text-center mb-3">
-                    <h6 className="text-secondary text-lg font-bold">
+                    <strong className="text-secondary sm:text-3xl text-2xl font-bold title-font mb-2">
                       Update profile
-                    </h6>
+                    </strong>
                   </div>
                   <hr className="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div className="flex-auto px-6 lg:px-10 py-10 pt-0">
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={handleUpdate}>
+                    {/* Image */}
+                    <div className="relative w-full mb-6 ">
+                      <input 
+                        type="file" 
+                        hidden 
+                        ref={fileRef} 
+                        accept='image/*'
+                        name='avatar'
+                        onChange={handleChange}
+                      />
+                      <img 
+                        src={!imageForDisplay ? (userInfo?.data?.avatar) : (imageForDisplay)} 
+                        alt="Avatar" 
+                        onClick={() => fileRef.current.click()}
+                        className=' w-1/3 mx-auto cursor-pointer rounded-full hover:shadow-lg shadow-md hover:border-2 border-gray-300'
+                      />
+                    </div>
+                    {/* Username */}
                     <div className="relative w-full mb-3">
                       <label
                         className="block uppercase text-gray-700 text-xs font-bold mb-2">
@@ -90,13 +107,13 @@ export default function Profile() {
                         className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                         placeholder="Username"
                         style={{ transition: "all .15s ease" }}
-                        defaultValue={userInfo?.res?.data?.username}
+                        defaultValue={userInfo?.data?.username}
                         id="username"
                         onChange={handleChange}
                         autoComplete='username'
                       />
                     </div>
-
+                    {/* Email */}
                     <div className="relative w-full mb-3">
                       <label
                         className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -108,12 +125,13 @@ export default function Profile() {
                         className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                         style={{ transition: "all .15s ease" }}
                         placeholder="Email"
-                        defaultValue={userInfo?.res?.data?.email}
+                        defaultValue={userInfo?.data?.email}
                         id="email"
                         onChange={handleChange}
                         autoComplete='email'
                       />
                     </div>
+                    {/* Phone number */}
                     <div className="relative w-full mb-3">
                       <label
                         className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -125,13 +143,13 @@ export default function Profile() {
                         className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                         style={{ transition: "all .15s ease" }}
                         placeholder="Phone number"
-                        defaultValue={userInfo?.res?.data?.phone}
+                        defaultValue={userInfo?.data?.phone}
                         id='phone'
                         onChange={handleChange}
                         autoComplete='numder'/>
                     </div>
-
-                    {/* <div className="relative w-full mb-3">
+                    {/* Current Password */}
+                    <div className="relative w-full mb-3">
                       <label
                         className="block uppercase text-gray-700 text-xs font-bold mb-2"
                         htmlFor="grid-password">
@@ -151,6 +169,7 @@ export default function Profile() {
                           {passwordShown ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                         </span>
                     </div>
+                    {/* The new Password */}
                     <div className="relative w-full mb-3">
                       <label
                         className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -165,8 +184,8 @@ export default function Profile() {
                         id='newPassword'
                         onChange={handleChange}
                         autoComplete='new-password' />
-                    </div> */}
-
+                    </div>
+                    {/* Submit button */}
                     <div className="text-center mt-10">
                       <button
                         className="bg-secondary text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
