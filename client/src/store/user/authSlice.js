@@ -1,25 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { persistState, getStateFromStorage } from '../../utils/localStorage.js';
 
 const initialState = {
-  userInfo: localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo'))
-  : null
-}
+  // from mern-typescript-main
+  userInfo: getStateFromStorage('userInfo') || null,
+  accessToken: null,
+  refreshToken: null,
+};
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    signIn: (state, action) => {
-      state.userInfo = action.payload;
-      localStorage.setItem('userInfo', JSON.stringify(action.payload));
+    setUserInfo: (state, action) => {
+      if (action.payload.res) {  
+        state.userInfo = action.payload.res;
+        state.accessToken = state.userInfo.accessToken;
+        state.refreshToken =  state.userInfo.refreshToken;
+        persistState("userInfo", state.userInfo);
+      }
     },
+
     signOut: (state) => {
       state.userInfo = null;
-      localStorage.removeItem('userInfo');
+      state.accessToken = null;
+      state.refreshToken = null;
+      persistState("userInfo", null);
     },
   },
 });
 
-export const { signIn, signOut, signUp } = authSlice.actions;
+export const { setUserInfo, signOut } = authSlice.actions;
 export default authSlice.reducer;

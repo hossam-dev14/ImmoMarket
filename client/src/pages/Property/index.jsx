@@ -6,9 +6,9 @@ import { toast } from 'react-toastify';
 // import { AiFillPlusCircle } from 'react-icons/ai';
 
 import { useParams } from 'react-router-dom';
-import DotLoader from 'react-spinners/DotLoader';
 import { useSelector } from 'react-redux';
 import { SlHeart, SlLocationPin, SlNote, SlShare } from 'react-icons/sl';
+import BeatLoader from 'react-spinners/BeatLoader';
 import Map from '../../components/Map';
 import ThreeDTour from '../../components/ThreeDTour';
 
@@ -22,6 +22,7 @@ export default function Property() {
   const [loading, setLoading] = useState(true);
   const formRef = useRef()
   
+  // EmailJS To sendMail 
   const serviceID = "service_q8tcpzy"
   const templateID = "template_qubcj94"
   const publicKey = "21vPKvxAk7DXkAJTf"
@@ -35,10 +36,12 @@ export default function Property() {
       formRef.current,{ publicKey: publicKey })
       .then(
         () => {
-          console.log('SUCCESS!');
+          toast.success("Email sent successfully!");
+          console.log('Success!');
         },
         (error) => {
-          console.log('FAILED...', error.text);
+          toast.error("Failed to send email. Please try again.");
+          console.log('Failed...', error.text);
         },
       );
   };
@@ -57,15 +60,13 @@ export default function Property() {
     getProperty();
   }, [params.propertyId]);
 
-  console.log(property?.ownerId?.email);
-
   return (
     <Layout>
       <section className=" text-gray-600 body-font">
-        <div className="container flex flex-col w-full px-5 py-24 mx-auto min-h-[30vh]">
+        <div className="container flex items-center justify-center flex-col w-full px-5 py-24 mx-auto min-h-[30vh]">
         {loading ? (
-          <div className='flex items-center justify-center text-center h-3/4 w-screen'>
-            <DotLoader
+          <div className='h-3/4 w-screen text-center'>
+            <BeatLoader
               color="#064862"
               size={30} 
               aria-label="Loading..."
@@ -254,14 +255,16 @@ export default function Property() {
                         placeholder="Message"
                         autoComplete='Message'
                         required
-                      >{`I am interested in your property "${property?.title}"`}</textArea>
+                      >{`I am interested in your property '${property?.title}'`}</textArea>
                     </div>
                     {/* Submit */}
                     <div className="text-center mt-3">
-                      <button
+                      <button 
+                        type="submit"
+                        disabled={loading}
                         className="bg-secondary text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                        type="submit">
-                        Send Message
+                      >
+                        { loading ? 'Sending...' : 'Send Message'}
                       </button>
                     </div>
                   </form>

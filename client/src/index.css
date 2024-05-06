@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* sidebar width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+
+body::-webkit-scrollbar {
+  width: 7px;
+}
+
+
+/* Handle */
+body::-webkit-scrollbar-thumb {
+  background: #064862;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

@@ -209,7 +209,7 @@ export default function AddProperty() {
                       </select>
                     </div>
 
-                    {/* Category (rent, sell) */} 
+                    {/* Category (rent, sale) */} 
                     <div className="relative w-full mb-5">
                       <label
                         className="block text-gray-700 text-xs font-bold mb-2"
@@ -222,7 +222,7 @@ export default function AddProperty() {
                         onChange={handleChange}
                         value={formData.category}>
                         <option value="rent">Rent</option>
-                        <option value="sell">Sell</option>
+                        <option value="sale">Sale</option>
                       </select>
                     </div>
 

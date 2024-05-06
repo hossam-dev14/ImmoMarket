@@ -48,7 +48,7 @@ export default function Properties() {
           </div>
           ) : properties ? (
             <div>
-              <div className="flex flex-wrap justify-center gap-4 -m-4">
+              <div className="flex flex-wrap justify-center gap-8 -m-4">
                 {properties.map((prop, i) => (
                   <PropertyCard propsCard={prop} key={i} />
                 ))}
