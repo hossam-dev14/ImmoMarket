@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types'; // Import PropTypes
-
 import Header from '../Header';
 // import Footer from '../Footer';
 import Sidebar from '../Sidebar';
@@ -10,11 +9,12 @@ import SidebarToggle from "../../components/SidebarToggle";
 const Layout = ({ children }) => {
   const {userInfo} = useSelector((state) => state.auth);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(userInfo !== null);
-  }, []);
+    setIsLoggedIn(userInfo?.data !== null); // !data == true || data == false
+    setShowSidebar(true);
+  }, [userInfo]);
   
   return (
     <>

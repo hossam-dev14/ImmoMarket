@@ -13,7 +13,8 @@ export default {
         'secondary': '#064862',
         'white': '#ffffff',
         'black': '#333333'
-      }
+      },
+      
     },
   },
   plugins: [],
