@@ -1,6 +1,13 @@
 # ImmoMarket
 ImmoMarket is a dynamic real estate marketplace for real estate advertisements and the rental of apartments and houses. It is built using the MERN (MongoDB, Express, React, Node.js) stack.
 
+## Preview Image
+![ImmoMarket Real Estate](https://github.com/hossam-dev14/ImmoMarket/assets/73648971/ccf8ca97-841a-41d8-a4ff-a09f84fdb5b2)
+
+## Live Demo
+<!-- Click here to preview:   -->
+
+
 ## Features
 
  * User Authentication: Users can register, login, and manage their profiles.
