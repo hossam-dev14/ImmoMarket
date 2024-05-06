@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"yarn workspace api start\" \"yarn workspace client run dev\""
+    "start": "concurrently \"yarn workspace api dev\" \"yarn workspace client run dev\""
   },
   "keywords": [],
   "author": "",
