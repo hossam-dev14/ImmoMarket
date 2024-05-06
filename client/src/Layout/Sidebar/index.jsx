@@ -140,7 +140,7 @@ const Sidebar = () => {
       <SidebarToggle showSidebar={showSidebar} toggleSidebar={toggleSidebar} />
 
       {/* Footer */}
-      <footer className='lg:pl-64'>
+      <footer className='lg:pl-64 '>
         <div className="bg-gray-100 w-full">
           <div className="container py-4 px-5 mx-auto flex justify-between items-center sm:flex-row flex-col">
             <p className="text-sm text-gray-500 ">© {new Date().getFullYear()}{" "} ImmoMarket by

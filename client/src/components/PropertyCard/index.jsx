@@ -7,7 +7,7 @@ const PropertyCard = ({ propsCard }) => {
 
   return (
     <div onClick={() => navigate(`../properties/${propsCard.id}`)}
-      className="bg-slate-100 lg:w-1/4 md:w-2/5 sm:w-1/2 p shadow-md rounded-lg cursor-pointer" 
+      className="bg-slate-100 lg:w-1/3 md:w-2/5 sm:w-1/2 shadow-md rounded-lg cursor-pointer hover:shadow-lg" 
     >
       <img className="h-70 rounded-md w-full object-cover object-center shadow-lg" src={propsCard.imageUrl} alt="home"/>
       <div className='p-4'>

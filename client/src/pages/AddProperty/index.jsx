@@ -88,7 +88,7 @@ export default function AddProperty() {
   return  (
     <Layout>
       <section className="w-full h-full">
-        <div className="container mx-auto px-4 my-12 h-full">
+        <div className="container mx-auto px-4 my-12 h-full h-[79vh]">
           <div className="flex content-center items-center justify-center h-full">
             <div className="w-full px-4">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg bg-white border-0">

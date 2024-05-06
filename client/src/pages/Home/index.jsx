@@ -32,19 +32,9 @@ export default function Home() {
   return (
     <Layout>
       <Hero />
-      <section className='pt-6 px-4 md:px-10 pb-20'>
+      <section className='pt-6 px-4 md:px-10 pb-10'>
         <div className="container flex items-center justify-center flex-col w-full px-5 py-24 mx-auto min-h-[30vh]">
-          {/* {isAuthenticated && (
-            <div className='mx-4 mt-2 space-y-2 float-right '>
-              <Link
-                to='/add-property'
-                className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-secondary hover:bg-gray-400'
-              >
-                + Add Listing
-              </Link>
-            </div>
-          )} */}
-
+          
           {/* Propereties her */}
           { !properties ? (
             <div className='text-center h-3/4 w-screen'>
