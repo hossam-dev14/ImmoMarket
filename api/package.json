@@ -5,16 +5,15 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon main.js",
-    "test": "jest"
+    "dev": "nodemon main.js"
+
   },
   "devDependencies": {
-    "jest": "^29.7.0",
+
     "nodemon": "^3.1.0"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.24.4",
-    "@babel/register": "^7.23.7",
+    
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
