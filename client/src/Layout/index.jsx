@@ -1,9 +1,10 @@
-// import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './Header';
 import Footer from './Footer';
 
-export default function Layout({ children }) {
+
+const Layout = ({ children }) => {
   return (
     <>
       <Header />
@@ -13,18 +14,13 @@ export default function Layout({ children }) {
   );
 }
 
-
-
 // Specify the expected type of the children prop
-// Layout.propTypes = {
-//   children: PropTypes.node.isRequired,
-// };
+Layout.propTypes = {
+  // children: PropTypes.node, // Requires a node to be passed as a child
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.arrayOf([PropTypes.node]),
+  ]).isRequired,
+};
 
-// DefaultLayout.propTypes = {
-//   children: PropTypes.oneOfType([
-//     PropTypes.node,
-//     PropTypes.arrayOf([PropTypes.node]),
-//   ]).isRequired,
-// };
-
-// node instead of Node
+export default Layout;
