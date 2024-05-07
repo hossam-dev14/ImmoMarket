@@ -24,7 +24,7 @@ router.post('/add', isAuthenticated, uploadImage, addProperty);
 router.get('/', isAuthenticated, getMyListing);
 router.get('/all', getAllProperties);
 router.get('/:id', getProperty);
-router.put('/:id', isAuthenticated, updateProperty);
+router.put('/:id', isAuthenticated, uploadImage, updateProperty);
 router.delete('/:id', isAuthenticated, deleteProperty);
 
 
