@@ -154,38 +154,66 @@ export const getMyListing = async (req, res, next) => {
 
 // Update property by ID
 export const updateProperty = async (req, res, next) => {
-  const propID = req.params.id;
-  // console.log(req.user);
+  const { id } = req.params;
+  // console.log(id);
+
+  const { title, description, address, price, listingType, 
+    category, bedrooms, bathrooms, furnished, parking
+  } = req.body;
+
   try {
-  //   // Find the property by ID
-    const property = await Property.findById(propID);
-    console.log(property);
-    
-    // Check if the property exists
+
+    // Find the property by id
+    let property = await Property.findById(id);
+
+    //  Check if the property exists
     if (!property) {
-      return res.status(404).json({ error: 'Property not found!' });
+      return next(createError(404, "Property not found"));
+    }
+    
+    // Ensure that the user owns the property
+    const ownerId = req.user;
+    if (!ownerId) {
+      return next(createError(404, "Owner not found"));
     }
 
-    console.log(property.ownerId.toString());
-    
-    // Check if the user is authorized to update the property
-    if (req.user !== property.ownerId.toString()) {
-      return res.status(401).json({ error: 'You can only update your own properties!' });
+    if (property.ownerId.toString() !== ownerId) {
+      return next(createError(403, "You are not authorized to edit this property"));
     }
+
+    // Get the uploaded file if it exists
+    const file = req.file;
+    console.log(file)
+    // if (!file) return next(createError(400, 'No image in the request'));
+    
+    const fileName = file.filename;
+    const basePath = `${req.protocol}://${req.get('host')}/images/`;
 
     // Update the property
-    const updatedProperty = await Property.findByIdAndUpdate(
-      propID, 
-      req.body, 
-      { new: true }
-    );
-    if (!updatedProperty) {
+    property = await Property.findByIdAndUpdate(id, {
+      title,
+      description,
+      address,
+      price,
+      listingType, 
+      category,
+      furnished,
+      parking,
+      bedrooms,
+      bathrooms,
+      imageUrl: `${basePath}${fileName}`,
+      ownerId
+    }, { new: true });
+
+    if (!property) {
       throw createError(404, 'No property found');
     }
-    res.status(200).json({
-      message: 'Property updated successfully',
-      updatedProperty
+
+    res.status(200).json({ 
+      message: 'Property updated successfully', 
+      property
     });
+
   } catch (error) {
     console.error(error);
     next(error);
