@@ -3,38 +3,30 @@ import Layout from "../../Layout/DashLayout";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-// import { AiFillPlusCircle } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 
 export default function AddProperty() {
   const fileRef = useRef(null);
   const {userInfo, isLoading } = useSelector((state) => state.auth);
+  const [imageForDisplay, setImageForDisplay] = useState(false);  
   const [imageUpload, setImageUpload] = useState(null);
-  const [imageForDisplay, setImageForDisplay] = useState(false);
-  
-  // const [error, setError] = useState(false);
-  // const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    title: 'Spacious Apartments',
-    description: 'Beautiful apartments with a large garden',
-    address: '123 Main Street',
-    listingType: 'apartments',
-    category: 'rent',
-    price: 34570,
-    bedrooms: 3,
-    bathrooms: 4,
+    title: '',
+    description: '',
+    address: '',
+    listingType: '',
+    category: '',
+    price: 0,
+    bedrooms: 1,
+    bathrooms: 1,
     furnished: false,
     parking: false,
     imageUrl: null,
   });
-  console.log(formData);
 
-  console.log(imageForDisplay, formData.imageUrl);
-  
   const handleChange = (e) => {
     const { name, checked, value, files } = e.target; // Changed 'file' to 'files' to correctly access the files property
     if (name === 'imageUrl') {
@@ -88,7 +80,7 @@ export default function AddProperty() {
   return  (
     <Layout>
       <section className="w-full h-full">
-        <div className="container mx-auto px-4 my-12 h-full h-[79vh]">
+        <div className="container mx-auto px-4 my-12 h-full">
           <div className="flex content-center items-center justify-center h-full">
             <div className="w-full px-4">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg bg-white border-0">
