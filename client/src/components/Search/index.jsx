@@ -41,5 +41,5 @@ export default function Search({ setSearchTerm }) {
 
 // Define propsTable for your component
 Search.propTypes = {
-  setSearchTerm: PropTypes.func.isRequired,
+  setSearchTerm: PropTypes.string.isRequired,
 };
