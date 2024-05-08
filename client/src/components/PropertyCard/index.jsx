@@ -9,7 +9,7 @@ const PropertyCard = ({ propsCard }) => {
     <div onClick={() => navigate(`../properties/${propsCard.id}`)}
       className="bg-slate-100 lg:w-1/3 md:w-2/5 sm:w-1/2 shadow-md rounded-lg cursor-pointer hover:shadow-lg" 
     >
-      <img className="h-70 rounded-md w-full object-cover object-center shadow-lg" src={propsCard.imageUrl} alt="home"/>
+      <img className="min-h-60 w-full rounded-md object-cover object-center shadow-lg" src={propsCard.imageUrl} alt="home"/>
       <div className='p-4'>
         <h2 className="text-md text-gray-900 font-medium text-lg title-font mb-2">{propsCard.title}</h2>
         <div className='flex items-center justify-between'>
