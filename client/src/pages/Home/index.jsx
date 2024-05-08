@@ -50,7 +50,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className='pt- px-4 md:px-10 pb-10'>
+        <div className='pt- px-4 md:px-10 pb-10 '>
           <div className="container flex items-center justify-center flex-col w-full px-5 py-16 mx-auto min-h-[30vh]">
             {/* Propereties here */}
             {loading ? (
@@ -64,10 +64,9 @@ export default function Home() {
               </div>
             ) : properties && properties.length > 0 ? (
 
-              <div>
+              <div className='w-full'>
                 {/* Search: Buy/Rent , I'm looking to (buy Apartments), Location(Berlin, Germany), Price Range($10,0000-$200,000) */}
                 {/* Top Properties */}
-                {/* Explore the Neighborhoods */}
                 {/* Recent Properties for Sold */}
                 {/* Popular Cities */}
                 {/* Buy, Rent & Sell */}
@@ -75,7 +74,7 @@ export default function Home() {
                 {/* Meet Our Agents */}
                 {/* Client Review */}
 
-                <div className="flex flex-wrap justify-center gap-5 mt-8">
+                <div className="flex flex-wrap justify-center gap-5 mt-8 -m-4">
                   {properties.map((prop, i) => (
                     <PropertyCard propsCard={prop} key={i} />
                   ))}
