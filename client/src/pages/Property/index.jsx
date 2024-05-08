@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from "../../Layout";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-// import { AiFillPlusCircle } from 'react-icons/ai';
-
-import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { SlHeart, SlLocationPin, SlNote, SlShare } from 'react-icons/sl';
 import BeatLoader from 'react-spinners/BeatLoader';

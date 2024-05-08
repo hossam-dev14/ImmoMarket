@@ -43,9 +43,6 @@ export default function Profile() {
     }
   };
 
-  console.log(imageForDisplay)
-  console.log(formData)
-
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
