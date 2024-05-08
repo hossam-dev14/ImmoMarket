@@ -37,13 +37,14 @@ export default function Home() {
         style={{backgroundImage: `url(${bgImg})`}}>
           <div className="flex flex-col justify-center items-start py-4 mt-16 w-1/2">
             <div className="hero-title">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold lg:font-bold text-gray-200">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold lg:font-bold text-gray-200"
+              style={{lineHeight: "4rem"}}>
                 Discover Most Suitable <br />
                 Properties in One Place
               </h1>
             </div>
             {/* <Search /> */}
-            <div className='w-4/5 max-w-[30rem] min-w-60 mt-8 mb-16'>
+            <div className='w-full max-w-[43rem] min-w-60 mt-8 mb-16'>
               <Search setSearchTerm={setSearchTerm} /> {/* Pass setSearchTerm to the Search component */}
             </div>
           </div>
