@@ -10,7 +10,6 @@ export default function AddProperty() {
   const fileRef = useRef(null);
   const {userInfo, isLoading } = useSelector((state) => state.auth);
   const [imageForDisplay, setImageForDisplay] = useState(false);  
-  const [imageUpload, setImageUpload] = useState(null);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -61,7 +60,7 @@ export default function AddProperty() {
         ownerId: userInfo.data._id
       };
   
-      const res = await axios.post('http://localhost:8080/api/properties/add', 
+      const res = await axios.post('/api/properties/add', 
       propertyData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
