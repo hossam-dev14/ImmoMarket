@@ -5,26 +5,9 @@ import { SlNote, SlTrash } from "react-icons/sl";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-const TableData = ({ propsTable }) => {
+const TableData = ({ propsTable, onDelete }) => {
   const {userInfo} = useSelector((state) => state.auth);
   // const navigate = useNavigate();
-
-  const handleDeleteProperty = async (propertyId) => {
-    try {
-      const token = userInfo.accessToken;
-      const res = await axios.get(`http://localhost:8080/api/properties/${propertyId}`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        method: 'DELETE'
-      });
-      
-      
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
 
   return ( 
     <tr className="border-b-2 border-gray-200" key={propsTable.id}>
@@ -36,7 +19,7 @@ const TableData = ({ propsTable }) => {
       <td className=" px-4 py-3 border-r-2 flex justify-evenly items-center h-16 w-36 text-lg text-center">
         <Link to={`/edit-property/${propsTable.id}`} className="text-green-500 flex justify-center items-center h-10 w-10 text-xl font-bold  
         bg-gray-100 rounded-md shadow-md hover:bg-gray-300"><SlNote /></Link>
-        <Link onClick={() => handleDeleteProperty(propsTable.id)} className="text-red-500 flex justify-center items-center h-10 w-10 text-xl font-bold  
+        <Link onClick={() => onDelete(propsTable.id)} className="text-red-500 flex justify-center items-center h-10 w-10 text-xl font-bold  
         bg-gray-100 rounded-md shadow-md
         hover:bg-gray-300"><SlTrash /></Link>
       </td>
@@ -55,6 +38,7 @@ TableData.propTypes = {
     listingType: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
   }).isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 

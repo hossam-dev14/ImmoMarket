@@ -29,24 +29,27 @@ const MyListing = () => {
       }
     };
     getMyListing();
-  }, []);
+  }, [userInfo.accessToken]);
 
 
   const handleDeleteProperty = async (propertyId) => {
     try {
       const token = userInfo.accessToken;
-      const res = await axios.get(`http://localhost:8080/api/properties/${propertyId}`,{
-        method: 'DELETE',
+      await axios.delete(`http://localhost:8080/api/properties/${propertyId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
-      
+      // Remove the deleted property from the state
+      setProperties(properties.filter((property) => property.id !== propertyId));
+
     } catch (error) {
       console.error(error);
     }
   };
+
+
+
 
   return (
     <div>
@@ -75,7 +78,7 @@ const MyListing = () => {
           <tbody>
           
              { properties.map((prop, i) => (
-                <TableData propsTable={prop} key={i} />
+                <TableData propsTable={prop} key={i} onDelete={handleDeleteProperty} />
               ))}
 
           </tbody>
@@ -94,6 +97,5 @@ const MyListing = () => {
     </div>
   )
 }
-
 
 export default MyListing;
