@@ -1,5 +1,6 @@
 // import React, { useState } from 'react'
 import { SlMenu  } from "react-icons/sl";
+import PropTypes from 'prop-types'; // Import PropTypes
 
 function SidebarToggle({showSidebar, toggleSidebar}) {
 
@@ -22,3 +23,10 @@ function SidebarToggle({showSidebar, toggleSidebar}) {
 }
 
 export default SidebarToggle;
+
+
+// Define propsTable for your component
+SidebarToggle.propTypes = {
+  showSidebar: PropTypes.boolean.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
+};
