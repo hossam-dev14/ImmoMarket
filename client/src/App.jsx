@@ -85,7 +85,7 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />}/>
             <Route path="/profile" element={<Profile />}/>
             <Route path="/add-property" element={<AddProperty />}/>
-            <Route path="/edit-property" element={<EditProperty />}/>
+            <Route path="/edit-property/:propertyId" element={<EditProperty />}/>
             <Route path="/my-listing" element={<PropertyList />}/>
           </Route>
           <Route path="*" element={<ErrorPage/>} />
