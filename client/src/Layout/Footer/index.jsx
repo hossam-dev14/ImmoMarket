@@ -5,7 +5,7 @@ import { SlSocialFacebook, SlSocialInstagram, SlSocialPintarest } from 'react-ic
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-100 text-gray-600 body-font mt-20">
+    <footer className="bg-slate-100 text-gray-600 body-font mt-16">
       <div className="container px-5 py-10 mx-auto flex md:items-start lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col justify-between">
         <div className="w-72 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
           <Link to='/' className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
