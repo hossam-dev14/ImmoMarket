@@ -80,8 +80,8 @@ export default function AddProperty() {
   return  (
     <Layout>
       <section className="w-full h-full">
-        <div className="container mx-auto px-4 my-12 h-full">
-          <div className="flex content-center items-center justify-center h-full">
+        <div className="container flex content-center items-center justify-center mx-auto px-6 md:px-12 my-12 h-full">
+          <div className="flex sm:w-full lg:max-w-5xl content-center items-center justify-center h-full">
             <div className="w-full px-4">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg bg-white border-0">
                 <div className="rounded-t mb-0 px-6 py-6">
@@ -158,10 +158,10 @@ export default function AddProperty() {
                           name="imageUrl"
                           onChange={handleChange}
                         />
-                        <div className='w-full h-80 rounded-md shadow-md bg-gray-100 flex justify-center items-center flex-col'>
+                        <div className='w-full h-64 md:80 lg:h-96 rounded-md shadow-md bg-gray-100 flex justify-center items-center flex-col'>
                           <div 
                               onClick={()=> fileRef.current.click()}
-                              className="w-full h-80 p-1 flex justify-center items-center 
+                              className="w-full h-full p-1 flex justify-center items-center 
                                 rounded text-sm shadow  transition duration-150 ease-in-out cursor-pointer
                                  hover:border-2 border-gray-300">
                               {!imageForDisplay ? (
@@ -200,7 +200,6 @@ export default function AddProperty() {
                         <option value="offices">Offices</option>
                       </select>
                     </div>
-
                     {/* Category (rent, sale) */} 
                     <div className="relative w-full mb-5">
                       <label
@@ -217,7 +216,6 @@ export default function AddProperty() {
                         <option value="sale">Sale</option>
                       </select>
                     </div>
-
                     <div className='flex flex-wrap w-full mb-5 justify-between gap-x-5'>
                       {/* Price */}
                       <div className="w-full sm:w-28 mb-5 ">
@@ -270,7 +268,6 @@ export default function AddProperty() {
                           onChange={handleChange}/>
                       </div>
                     </div>
-
                     <div className='flex flex-wrap w-full mb-5 gap-x-8'>
                       {/* furnished */}
                       <div className="relative mb-5 flex gap-3">
@@ -304,7 +301,6 @@ export default function AddProperty() {
                           />
                       </div>
                     </div>
-
                     {/* Submit Button */}
                     <div className="text-center mt-4">
                       <button
