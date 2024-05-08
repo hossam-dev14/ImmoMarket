@@ -15,7 +15,7 @@ const MyListing = () => {
     const getMyListing = async () => {
       try {
         const token = userInfo.accessToken;
-        const res = await axios.get('http://localhost:8080/api/properties',{
+        const res = await axios.get('/api/properties',{
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,7 +35,7 @@ const MyListing = () => {
   const handleDeleteProperty = async (propertyId) => {
     try {
       const token = userInfo.accessToken;
-      await axios.delete(`http://localhost:8080/api/properties/${propertyId}`, {
+      await axios.delete(`/api/properties/${propertyId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
