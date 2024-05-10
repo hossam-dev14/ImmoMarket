@@ -14,11 +14,10 @@ export default function Properties() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-
   useEffect(() => {
     const getProperties = async () => {
       try {
-        const res = await axios.get(`/api/properties/all?search=${searchTerm}`);
+        const res = await axios.get(`/api/properties/all`, {params: {search: searchTerm}});
         setProperties(res.data);
         setLoading(false);
       } catch (error) {
@@ -28,7 +27,6 @@ export default function Properties() {
     };
     getProperties();
   }, [searchTerm]);
-
 
   return (
     <Layout>
@@ -40,12 +38,11 @@ export default function Properties() {
             </strong>
             <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Find your house dream!</p>
             {/* <Search /> */}
-            <div className='w-4/5 max-w-[30rem] min-w-60 mt-8 mb-16'>
+            <div className='w-4/5 max-w-[30rem] min-w-72 mt-8 mb-16'>
               <Search setSearchTerm={setSearchTerm} /> {/* Pass setSearchTerm to the Search component */}
             </div>
           </div>
           
-
           { loading ? 
           (<div className='flex items-center justify-center text-center h-3/4 w-screen'>
             <BeatLoader
@@ -57,7 +54,7 @@ export default function Properties() {
           </div>
           ) : properties ? (
             <div>
-              <div className="flex flex-wrap justify-center gap-8 -m-4">
+              <div className="flex flex-wrap justify-center gap-8">
                 {properties.map((prop, i) => (
                   <PropertyCard propsCard={prop} key={i} />
                 ))}
