@@ -22,10 +22,10 @@ function SidebarToggle({showSidebar, toggleSidebar}) {
   )
 }
 
+SidebarToggle.propTypes = {
+  showSidebar: PropTypes.boolean.isRequired,
+  toggleSidebar: PropTypes.func.isRequired
+};
+
 export default SidebarToggle;
 
-// Specify the expected type of the children prop
-SidebarToggle.propTypes = {
-  showSidebar: PropTypes.boolean,
-  toggleSidebar: PropTypes.function
-};
