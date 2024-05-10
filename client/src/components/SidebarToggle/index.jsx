@@ -24,9 +24,8 @@ function SidebarToggle({showSidebar, toggleSidebar}) {
 
 export default SidebarToggle;
 
-
-// Define propsTable for your component
+// Specify the expected type of the children prop
 SidebarToggle.propTypes = {
-  showSidebar: PropTypes.boolean.isRequired,
-  toggleSidebar: PropTypes.func.isRequired,
+  showSidebar: PropTypes.boolean,
+  toggleSidebar: PropTypes.function
 };
