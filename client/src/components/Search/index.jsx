@@ -17,7 +17,7 @@ export default function Search({ setSearchTerm }) {
       <div className='relative flex'>
         <input
           type='text'
-          className='block p-5 w-full text-lg text-gray-900 bg-white rounded-lg border-none focus-visible:border-none shadow-sm'
+          className='block p-4 w-full text-lg text-gray-900 bg-white rounded-lg border-none focus-visible:border-none shadow-sm'
           placeholder='Search By Title/Description'
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -27,7 +27,7 @@ export default function Search({ setSearchTerm }) {
           type='submit'
           className=''
         >
-          <div className='flex absolute right-5 top-4 items-center pl-5'>
+          <div className='flex absolute right-4 top-4 items-center pl-5'>
             <span className="text-4xl">
               <IoSearch />
             </span>
@@ -41,5 +41,5 @@ export default function Search({ setSearchTerm }) {
 
 // Define propsTable for your component
 Search.propTypes = {
-  setSearchTerm: PropTypes.string.isRequired,
+  setSearchTerm: PropTypes.func.isRequired,
 };
