@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Layout from '../../Layout';
 import bgImg from '/src/assets/images/bg.png'
 import Search from '../../components/Search';
-import Hero from '../../components/Hero';
-import { toast } from 'react-toastify';
 import PropertyCard from '../../components/PropertyCard';
 import BeatLoader from 'react-spinners/BeatLoader';
 
@@ -17,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const getProperties = async () => {
       try {
-        const res = await axios.get(`/api/properties/all?search=${searchTerm}`);
+        const res = await axios.get(`/api/properties/all`, {params: {search: searchTerm}});
         setProperties(res.data);
         setLoading(false);
       } catch (error) {
@@ -28,8 +25,6 @@ export default function Home() {
     getProperties();
   }, [searchTerm]);
 
-  console.log(properties)
-
   return (
     <Layout>
       <section className="text-gray-600 body-font">
@@ -37,8 +32,7 @@ export default function Home() {
         style={{backgroundImage: `url(${bgImg})`}}>
           <div className="flex flex-col justify-center items-start py-4 mt-16 w-1/2">
             <div className="hero-title">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold lg:font-bold text-gray-200"
-              style={{lineHeight: "4rem"}}>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold lg:font-bold text-gray-200">
                 Discover Most Suitable <br />
                 Properties in One Place
               </h1>
