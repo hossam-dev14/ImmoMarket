@@ -17,7 +17,7 @@ export default function Footer() {
             </div>
             <span className="text-secondary text-2xl">ImmoMarket</span>
           </Link>
-          <p className="mt-2 text-sm text-gray-500">Air plant banjo lyft occupy retro adaptogen indego</p>
+          <p className="mt-2 text-sm text-gray-500">11910 Clyde Rapid Suite 70, Willyand, <br/> Virginia, United States</p>
         </div>
         <div className=" flex flex-wrap sm:flex-nowrap md:pl-12 -mb-10 md:mt-0 mt-10 md:text-left text-center">
           <div className="md:w-3/5 min-w-32 w-full px-2">
