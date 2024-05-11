@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "immomarket api",
+  "name": "immomarket-api",
   "builds": [
     { 
       "src": "main.js", 
