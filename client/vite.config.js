@@ -16,7 +16,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'https://immomarket.onrender.com/',
+        // target: 'https://immo-market-api.vercel.app/',
+        target: 'https://immo-market-api.vercel.app/',
         changeOrigin: true,
       },
     },
