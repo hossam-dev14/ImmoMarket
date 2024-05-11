@@ -23,8 +23,8 @@ function SidebarToggle({showSidebar, toggleSidebar}) {
 }
 
 SidebarToggle.propTypes = {
-  showSidebar: PropTypes.boolean.isRequired,
-  toggleSidebar: PropTypes.func.isRequired
+  showSidebar: PropTypes.bool.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
 };
 
 export default SidebarToggle;
