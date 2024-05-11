@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const getProperties = async () => {
       try {
-        const res = await axios.get(`/api/properties/all`, {params: {search: searchTerm}});
+        const res = await axios.get(`https://immo-market-api.vercel.app/api/properties/all`, {params: {search: searchTerm}});
         setProperties(res.data);
         setLoading(false);
       } catch (error) {
