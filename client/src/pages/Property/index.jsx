@@ -57,6 +57,10 @@ export default function Property() {
     getProperty();
   }, [params.propertyId]);
 
+
+  console.log(property?.ownerId?.id);
+  console.log(userInfo?.data?._id);
+
   return (
     <Layout>
       <section className=" text-gray-600 body-font">
@@ -75,12 +79,12 @@ export default function Property() {
             <div className="flex jaustify-between items-center w-full relative mb-4">
               <h1 className="text-3xl font-semibold text-gray-800">{property.title}</h1>
               <span className='hidden md:block bg-secondary text-sm px-3 py-2 ml-3 text-gray-50 rounded-md'>For {property.category.toUpperCase()}</span>
-              {(property?.ownerId?.id === userInfo?.data?._id) ? (
+              {( userInfo?.data?._id == property?.ownerId?.id) ? (
                 <div className="absolute top-0 right-0 flex gap-3">
                   <SlShare className='text-3xl font-bold cursor-pointer w-10 h-10 py-2 bg-gray-200 shadow-sm rounded-md hover:shadow-md hover:text-secondary'/>
                   <Link 
                     className="text-white bg-green-600 py-2 px-5 hover:bg-gray-500 rounded text-2xl"
-                    to={`/properties/${property.id}/edit`}
+                    to={`/edit-property/${property.id}`}
                   ><SlNote /></Link>
                 </div>
                 ) : (
