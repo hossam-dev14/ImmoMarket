@@ -24,7 +24,7 @@ dotenv.config();
 connectMongoDB();
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev')); // Change logging format if needed
