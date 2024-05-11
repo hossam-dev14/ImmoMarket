@@ -23,8 +23,15 @@ dotenv.config();
 // Connect to MongoDB
 connectMongoDB();
 
+// Enable CORS for all routes
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 // Middleware
-app.use(cors({ origin: 'https://immo-market-api.vercel.app' }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev')); // Change logging format if needed
