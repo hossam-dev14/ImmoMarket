@@ -19,7 +19,7 @@ export const addProperty = async (req, res, next) => {
     if (!file) return next(createError(400, 'No image in the request'));
     
     const fileName = file.filename;
-    const basePath = `${req.protocol}://${req.get('host')}/uploads/`;
+    const basePath = `${req.protocol}://${req.get('host')}/images/`;
 
     console.log(basePath+fileName)
 
