@@ -11,7 +11,7 @@ ImmoMarket is a dynamic real estate marketplace for real estate advertisements a
 ## Features
 
  * User Authentication: Users can register, login, and manage their profiles.
- * Real Estate Listings: Users can view available real estate listings with details such as title, description, address, price, bedrooms, bathrooms, etc.
+ * Real Estate Listings: Users can search and view available real estate listings with details and contacting owner by email.
  * Property Management: users can add, edit, and delete property listings.
  * Responsive Design: The application is responsive and works seamlessly across devices.
 
