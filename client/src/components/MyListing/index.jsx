@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 // import { useNavigate } from "react-router-dom";
 import TableData from '../TableData';
-import axios from 'axios';
 import BeatLoader from "react-spinners/BeatLoader";
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import api from '../../utils/api';
+import { toast } from 'react-toastify';
 
 const MyListing = () => {
   const [properties, setProperties] = useState(null);
@@ -15,7 +16,7 @@ const MyListing = () => {
     const getMyListing = async () => {
       try {
         const token = userInfo.accessToken;
-        const res = await axios.get('/api/properties',{
+        const res = await api.get('/properties',{
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,21 +36,18 @@ const MyListing = () => {
   const handleDeleteProperty = async (propertyId) => {
     try {
       const token = userInfo.accessToken;
-      await axios.delete(`/api/properties/${propertyId}`, {
+      await api.delete(`/properties/${propertyId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       // Remove the deleted property from the state
       setProperties(properties.filter((property) => property.id !== propertyId));
-
+      toast.success('Property deleted successfully');
     } catch (error) {
       console.error(error);
     }
   };
-
-
-
 
   return (
     <div>

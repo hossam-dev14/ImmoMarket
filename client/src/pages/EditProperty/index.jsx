@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from "../../Layout/DashLayout";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import api from '../../utils/api';
 
 export default function EditProperty() {
   const {userInfo, isLoading } = useSelector((state) => state.auth);
@@ -30,7 +30,7 @@ export default function EditProperty() {
   useEffect(() => {
     const getProperties = async () => {
       try {
-        const res = await axios.get(`/api/properties/${params.propertyId}`)
+        const res = await api.get(`/properties/${params.propertyId}`)
         setFormData(res.data);
       } catch (error) {
         console.error(error);
@@ -74,7 +74,7 @@ export default function EditProperty() {
         ownerId: userInfo.data._id
       };
       
-      const res = await axios.put(`/api/properties/${params.propertyId}`,
+      const res = await api.put(`/properties/${params.propertyId}`,
       propertyData, {
         headers: { 
           'Content-Type': 'multipart/form-data',

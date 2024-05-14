@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Layout from "../../Layout";
-import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
 import { toast } from 'react-toastify';
 // import { AiFillPlusCircle } from 'react-icons/ai';
 import PropertyCard from '../../components/PropertyCard';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Search from '../../components/Search';
-
+import api from '../../utils/api';
 
 export default function Properties() {
   const [properties, setProperties] = useState(null);
@@ -17,7 +15,7 @@ export default function Properties() {
   useEffect(() => {
     const getProperties = async () => {
       try {
-        const res = await axios.get(`/api/properties/all`, {params: {search: searchTerm}});
+        const res = await api.get(`/properties/all`, {params: {search: searchTerm}});
         setProperties(res.data);
         setLoading(false);
       } catch (error) {

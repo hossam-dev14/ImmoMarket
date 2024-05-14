@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from "../../Layout/DashLayout";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
+import api from '../../utils/api';
 
 export default function AddProperty() {
   const fileRef = useRef(null);
@@ -60,7 +60,7 @@ export default function AddProperty() {
         ownerId: userInfo.data._id
       };
   
-      const res = await axios.post('/api/properties/add', 
+      const res = await api.post('/properties/add', 
       propertyData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
@@ -75,7 +75,8 @@ export default function AddProperty() {
       console.log(err.message);
     }
   };
-  
+
+
   return  (
     <Layout>
       <section className="w-full h-full">

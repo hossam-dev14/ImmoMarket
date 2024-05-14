@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Layout from '../../Layout';
 import bgImg from '/src/assets/images/bg.png'
 import Search from '../../components/Search';
 import PropertyCard from '../../components/PropertyCard';
 import BeatLoader from 'react-spinners/BeatLoader';
+import api from '../../utils/api';
 
 export default function Home() {
   const [properties, setProperties] = useState(null);
@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const getProperties = async () => {
       try {
-        const res = await axios.get(`https://immo-market-api.vercel.app/api/properties/all`, {params: {search: searchTerm}});
+        const res = await api.get(`/properties/all`, {params: {search: searchTerm}});
         setProperties(res.data);
         setLoading(false);
       } catch (error) {

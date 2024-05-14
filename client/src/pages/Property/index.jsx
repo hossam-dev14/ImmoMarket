@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from "../../Layout";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { SlHeart, SlLocationPin, SlNote, SlShare } from 'react-icons/sl';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Map from '../../components/Map';
 import ThreeDTour from '../../components/ThreeDTour';
+import api from '../../utils/api';
 
 // EmailJS To sendMail 
 import emailjs from '@emailjs/browser';
@@ -46,7 +46,7 @@ export default function Property() {
   useEffect(() => {
     const getProperty = async () => {
       try {
-        const res = await axios.get(`/api/properties/${params.propertyId}`);
+        const res = await api.get(`/properties/${params.propertyId}`);
         setProperty(res.data);
         setLoading(false);
       } catch (error) {
