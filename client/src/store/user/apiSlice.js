@@ -5,7 +5,7 @@ import {
 import { getStateFromStorage } from '../../utils/localStorage.js';
 
 const baseQuery = fetchBaseQuery({ 
-  baseUrl: '',
+  baseUrl: 'https://immomarket.onrender.com/api',
   prepareHeaders: (headers) => {
     const accessToken = getStateFromStorage('userInfo')?.accessToken;
     if (accessToken) {
@@ -14,8 +14,8 @@ const baseQuery = fetchBaseQuery({
     return headers; 
   } 
 });
-const AUTH_URL = '/api/auth';
-const USER_URL = '/api/users';
+const AUTH_URL = '/auth';
+const USER_URL = '/users';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
