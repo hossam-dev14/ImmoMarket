@@ -24,28 +24,30 @@ dotenv.config();
 connectMongoDB();
 
 // Enable CORS for all routes
-app.use(cors({ origin: '*' }));
+// app.use(cors({ origin: '*' }));
+const corsOptions = {
+  origin: 'http://localhost:3000', // Replace with your frontend origin
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(morgan('dev')); // Change logging format if needed
+app.use(morgan('dev')); 
 
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename); // get the name of the directory
-
+// get the resolved path to the file
+const __filename = fileURLToPath(import.meta.url); 
+// get the name of the directory
+const __dirname = path.dirname(__filename); 
 
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
-// app.use(express.static('uploads'));
-// app.use('/api/public/images', express.static(path.join(__dirname, 'upload')));
 
 // Routes
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/properties', propertyRoute);
-
-// import multeRoute from './routes/multer.router.js'
-// app.use('/', multeRoute);
 
 
 // Error middleware (must be placed at the end)

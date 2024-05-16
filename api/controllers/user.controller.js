@@ -1,4 +1,7 @@
-import User, { userValidation } from '../models/user.model.js';
+import { v2 as cloudinary } from 'cloudinary';
+import User, { 
+  // userValidation 
+} from '../models/user.model.js';
 import createError from '../helpers/createError.js';
 
 // Retrive all Users profile
@@ -28,21 +31,26 @@ export const getUserDetails = async (req, res, next) => {
 // Update user
 export const updateUser = async (req, res, next) => {
   const {username, email, phone, avatar} = req.body;
-  const file = req.file;
-
-  const basePath = `${req.protocol}://${req.get('host')}/images/`;
 
   try {
-    // // Validate the user data using Joi
+    
+    // Validate the user data using Joi
     // const {error} = userValidation.validate({username, email, phone});
     // if (error) return next(createError(400, error.details[0].message));
+    
+    
+    // Get the uploaded file
+    const file = req.file;
     
     let avatarUrl;
     
     // Check if file was uploaded
     if (file) {
+      // Upload image to Cloudinary
+      const result = await cloudinary.uploader.upload(file.path);
+
       // If file was uploaded, construct full avatar URL
-      avatarUrl = `${basePath}${file.filename}`;
+      avatarUrl= result.secure_url;
     } else {
       // If no file was uploaded, construct avatar URL using UI Avatars API
       avatarUrl = `https://ui-avatars.com/api/?background=random&rounded=true&name=${username}`;

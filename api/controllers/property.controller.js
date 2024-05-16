@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from 'cloudinary';
 import Property from '../models/property.model.js';
 import createError from '../helpers/createError.js';
 
@@ -18,10 +19,8 @@ export const addProperty = async (req, res, next) => {
     const file = req.file;
     if (!file) return next(createError(400, 'No image in the request'));
     
-    const fileName = file.filename;
-    const basePath = `${req.protocol}://${req.get('host')}/images/`;
-
-    console.log(basePath+fileName)
+    // Upload image to Cloudinary
+    const result = await cloudinary.uploader.upload(file.path);
 
     // Ensure that ownerId is present in the request (assuming it's populated by middleware)
     const ownerId = req.user;
@@ -41,7 +40,7 @@ export const addProperty = async (req, res, next) => {
       parking,
       bedrooms,
       bathrooms,
-      imageUrl: `${basePath}${fileName}`,
+      imageUrl: result.secure_url,
       ownerId
     });
   
@@ -157,14 +156,13 @@ export const getMyListing = async (req, res, next) => {
 // Update property by ID
 export const updateProperty = async (req, res, next) => {
   const { id } = req.params;
-  // console.log(id);
+  console.log();
 
   const { title, description, address, price, listingType, 
     category, bedrooms, bathrooms, furnished, parking
   } = req.body;
 
   try {
-
     // Find the property by id
     let property = await Property.findById(id);
 
@@ -185,11 +183,10 @@ export const updateProperty = async (req, res, next) => {
 
     // Get the uploaded file if it exists
     const file = req.file;
-    console.log(file)
-    // if (!file) return next(createError(400, 'No image in the request'));
-    
-    const fileName = file.filename;
-    const basePath = `${req.protocol}://${req.get('host')}/images/`;
+    if (!file) return next(createError(400, 'No image in the request'));
+
+    // Upload image to Cloudinary
+    const result = await cloudinary.uploader.upload(file.path);
 
     // Update the property
     property = await Property.findByIdAndUpdate(id, {
@@ -203,7 +200,7 @@ export const updateProperty = async (req, res, next) => {
       parking,
       bedrooms,
       bathrooms,
-      imageUrl: `${basePath}${fileName}`,
+      imageUrl: result.secure_url,
       ownerId
     }, { new: true });
 

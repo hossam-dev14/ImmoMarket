@@ -1,29 +1,24 @@
 import multer from 'multer';
+import { v2 as cloudinary } from 'cloudinary';
+import {CloudinaryStorage}  from 'multer-storage-cloudinary';
 
-const FILE_TYPEs = {
-  'image/png': 'png',
-  'image/jpeg': 'jpeg',
-  'image/jpg': 'jpg'
-};
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const isValid = FILE_TYPEs[file.mimetype];
-    if (!isValid) {
-      return cb(new Error('invalid image type'));
-    }
-
-    let uploadError = new Error('invalid image type');
-    if (isValid) {uploadError = null }
-    cb(uploadError, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    const fileName = file.originalname.replace(/[^\w.-]/g, '-');
-    cb(null, `${Date.now()}.${fileName}`);
-  }
+// Cloudinary Configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// const uploadOptions = multer({ dest: 'uploads/'});
-const uploadOptions = multer({ storage: storage });
 
-export default uploadOptions;
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads', // Optional - folder for the uploaded files
+    allowed_formats: ['jpg', 'png', 'jpeg'], // Optional - allowed file formats
+    // You can add more options here, see Cloudinary documentation for available options
+  },
+});
+
+const upload = multer({ storage: storage });
+export default upload;
