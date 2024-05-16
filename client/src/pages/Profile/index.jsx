@@ -54,12 +54,13 @@ export default function Profile() {
       const res = await updateUser(formData).unwrap();
       dispatch(setUserInfo(res));
 
-      toast.success(res.message);
+      toast.success(res?.seccuss)
+      
     } catch(err) {
-      toast.error(err?.data?.error?.message);
+      console.error(err.message);
+      toast.error(err.message);
     }
   };
-
   
   return (
     <Layout>
@@ -89,7 +90,8 @@ export default function Profile() {
                         onChange={handleChangeImage}
                       />
                       <img 
-                        src={!imageForDisplay ? (avatar) : (imageForDisplay)} 
+                        src={!imageForDisplay ? (avatar) : 
+                        (imageForDisplay)} 
                         alt="Avatar" 
                         onClick={() => fileRef.current.click()}
                         className=' w-1/3 mx-auto cursor-pointer rounded-full hover:shadow-lg shadow-md hover:border-2 border-gray-300'

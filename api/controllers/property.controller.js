@@ -156,10 +156,9 @@ export const getMyListing = async (req, res, next) => {
 // Update property by ID
 export const updateProperty = async (req, res, next) => {
   const { id } = req.params;
-  console.log();
 
   const { title, description, address, price, listingType, 
-    category, bedrooms, bathrooms, furnished, parking
+    category, bedrooms, bathrooms, furnished, parking, imageUrl
   } = req.body;
 
   try {
@@ -183,10 +182,15 @@ export const updateProperty = async (req, res, next) => {
 
     // Get the uploaded file if it exists
     const file = req.file;
-    if (!file) return next(createError(400, 'No image in the request'));
+    // if (!file) return next(createError(400, 'No image in the request'));
+    let newImageUrl;
 
-    // Upload image to Cloudinary
-    const result = await cloudinary.uploader.upload(file.path);
+    // Check if a file was uploaded
+    if (file) {
+      // Upload image to Cloudinary
+      const result = await cloudinary.uploader.upload(file.path);
+      newImageUrl = result.secure_url;
+    } 
 
     // Update the property
     property = await Property.findByIdAndUpdate(id, {
@@ -200,8 +204,7 @@ export const updateProperty = async (req, res, next) => {
       parking,
       bedrooms,
       bathrooms,
-      imageUrl: result.secure_url,
-      ownerId
+      imageUrl: newImageUrl,
     }, { new: true });
 
     if (!property) {

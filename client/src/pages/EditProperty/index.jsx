@@ -39,13 +39,12 @@ export default function EditProperty() {
     getProperties();
   }, [params.propertyId])
 
-
   const handleChange = (e) => {
-    const { name, checked, value, files } = e.target; // Changed 'file' to 'files' to correctly access the files property
+    const { name, checked, value, files } = e.target;
     if (name === 'imageUrl') {
       setFormData({
         ...formData,
-        [name]: files[0] // Changed 'file' to 'files[0]' to correctly access the first file in the array
+        [name]: files[0]
       });
       setImageForDisplay(URL.createObjectURL(files[0]));
     }
@@ -58,7 +57,6 @@ export default function EditProperty() {
   };
   console.log(formData)
 
-
   const handleEditProperty = async (e) => {
     e.preventDefault();
     try {
@@ -68,13 +66,16 @@ export default function EditProperty() {
         toast.error("Please fill in all required fields");
         return;
       }
-  
+
       const propertyData = {
         ...formData,
-        imageUrl: formData.imageUrl,
+        // imageUrl: typeof imageUrl === 'object' ? formData.imageUrl : formData.imageUrl,
+        imageUrl: formData.imageUrl,        
         ownerId: userInfo.data._id
       };
-      
+      console.log(propertyData)
+      console.log(formData.imageUrl);
+
       const res = await api.put(`/properties/update/${params.propertyId}`,
       propertyData, {
         headers: { 
@@ -83,7 +84,7 @@ export default function EditProperty() {
         }
       });
 
-      toast.success(res?.data?.message);
+      toast.success(res.message);
       navigate('/my-listing');
     } catch(err) {
       console.error(err.message);

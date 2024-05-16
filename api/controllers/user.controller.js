@@ -33,15 +33,12 @@ export const updateUser = async (req, res, next) => {
   const {username, email, phone, avatar} = req.body;
 
   try {
-    
     // Validate the user data using Joi
     // const {error} = userValidation.validate({username, email, phone});
     // if (error) return next(createError(400, error.details[0].message));
     
-    
     // Get the uploaded file
     const file = req.file;
-    
     let avatarUrl;
     
     // Check if file was uploaded
@@ -51,9 +48,6 @@ export const updateUser = async (req, res, next) => {
 
       // If file was uploaded, construct full avatar URL
       avatarUrl= result.secure_url;
-    } else {
-      // If no file was uploaded, construct avatar URL using UI Avatars API
-      avatarUrl = `https://ui-avatars.com/api/?background=random&rounded=true&name=${username}`;
     }
 
     // find and Update user
