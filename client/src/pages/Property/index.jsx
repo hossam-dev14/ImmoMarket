@@ -17,6 +17,7 @@ export default function Property() {
   const params = useParams();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showFullDesc, setShowFullDesc] = useState(false);
   const formRef = useRef()
   
   // EmailJS To sendMail 
@@ -41,7 +42,16 @@ export default function Property() {
           console.log('Failed...', error.text);
         },
       );
-  };
+    };
+    
+    // Handle Show More
+    const handleToggleDesc = () => {
+      setShowFullDesc(!showFullDesc);
+    };
+  
+    const previewLength = 100;
+    const descriptionPreview = property?.description.slice(0, previewLength);
+    const isLongDescription = property?.description.length > previewLength;
 
   useEffect(() => {
     const getProperty = async () => {
@@ -55,12 +65,12 @@ export default function Property() {
       }
     };
     getProperty();
+    
   }, [params.propertyId]);
 
 
-  console.log(property?.ownerId?.id);
-  console.log(userInfo?.data?._id);
 
+  
   return (
     <Layout>
       <section className=" text-gray-600 body-font">
@@ -117,10 +127,19 @@ export default function Property() {
                   <h2 className="title-font font-medium text-lg text-gray-900 mb-5">
                     Description
                   </h2>
-                  <p>{property.description}</p>
-                  <Link className="text-secondary inline-flex items-center">
-                    Learn More
-                  </Link>
+                  <p>
+                     {showFullDesc || !isLongDescription
+                        ? property.description 
+                        : `${descriptionPreview}...`}
+                    </p>
+                    {isLongDescription && (
+                      <Link 
+                        className="text-secondary inline-flex items-center" 
+                        onClick={handleToggleDesc}
+                      >
+                        {showFullDesc ? 'Show Less' : 'Learn More'}
+                      </Link>
+                    )}
                 </div>
 
                 {/* Property Details */}
@@ -179,7 +198,7 @@ export default function Property() {
 
               {/* Send Message to the Property's Owner */}
               <div className="sm:w-1/3 text-center sm:pl-4 sm:py-8 sm:border-l border-gray-200 mt-4 ">
-                <div className="w-18 h-18 rounded-full inline-flex items-center justify-center ">
+                <div className="w-24 h-24 rounded-full inline-flex items-center justify-center ">
                   <img src={property?.ownerId?.avatar} alt="Property" className="object-cover object-center h-full w-full rounded-full " />
                 </div>
                 <div className="flex flex-col items-center text-center justify-center">
