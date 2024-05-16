@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-// import { useNavigate } from "react-router-dom";
 import TableData from '../TableData';
 import BeatLoader from "react-spinners/BeatLoader";
 import { useSelector } from 'react-redux';
@@ -36,7 +35,7 @@ const MyListing = () => {
   const handleDeleteProperty = async (propertyId) => {
     try {
       const token = userInfo.accessToken;
-      await api.delete(`/properties/${propertyId}`, {
+      await api.delete(`/properties/delete/${propertyId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
