@@ -56,6 +56,7 @@ export default function EditProperty() {
       });
     }
   };
+  console.log(formData)
 
 
   const handleEditProperty = async (e) => {
@@ -74,7 +75,7 @@ export default function EditProperty() {
         ownerId: userInfo.data._id
       };
       
-      const res = await api.put(`/properties/${params.propertyId}`,
+      const res = await api.put(`/properties/update/${params.propertyId}`,
       propertyData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
@@ -85,11 +86,10 @@ export default function EditProperty() {
       toast.success(res?.data?.message);
       navigate('/my-listing');
     } catch(err) {
-      console.log(err.message);
+      console.error(err.message);
       toast.error(err.message);
     }
   }
-
 
   return  (
     <Layout>

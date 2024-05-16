@@ -13,51 +13,53 @@ import { setUserInfo } from '../../store/user/authSlice';
 
 export default function Profile() {
   const fileRef = useRef(null);
-  const [formData, setFormData] = useState({});
   const {userInfo} = useSelector((state) => state.auth);
+  const [username, setUsername] = useState(userInfo?.data?.username);
+  const [email, setEmail] = useState(userInfo?.data?.email);
+  const [phone, setPhone] = useState(userInfo?.data?.phone);
+
+  // Assuming you have a file input for avatar upload
+  const [avatar, setAvatar] = useState(userInfo?.data?.avatar); 
   const [passwordShown, setPasswordShown] = useState(false);
-  const [imageUpload, setImageUpload] = useState(null);
   const [imageForDisplay, setImageForDisplay] = useState(false);
   
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  const togglePassword = () => setPasswordShown(!passwordShown);
+  const dispatch = useDispatch();  
   const [updateUser, { isLoading }] = useUpdateUserMutation();
 
-  if (!userInfo) return toast.error('Not logged in!'); 
+  useEffect(() => {
+    if(!userInfo) return navigate('/signin');
+  },[userInfo, navigate]);
+  
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === 'avatar') {
-      setFormData({
-        ...formData,
-        [name]: files[0]
-      });
-      setImageForDisplay(URL.createObjectURL(files[0]));
-    } else {
-      setFormData({
-        ...formData, 
-        [name]: value
-      });
-    }
+  const togglePassword = () => setPasswordShown(!passwordShown);
+  
+  if (!userInfo) return toast.error('Not logged in!'); 
+  
+  
+  const handleChangeImage = (e) => {
+    setAvatar(e.target.files[0]);
+    setImageForDisplay(URL.createObjectURL(e.target.files[0]));
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
+      formData.append('avatar', avatar);
+      formData.append('username', username);
+      formData.append('email', email);
+      formData.append('phone', phone);
+
       const res = await updateUser(formData).unwrap();
       dispatch(setUserInfo(res));
-      // navigate('/my-listing');
+
       toast.success(res.message);
     } catch(err) {
       toast.error(err?.data?.error?.message);
     }
   };
 
-  // useEffect(() => {
-  //   if(!userInfo) return navigate('/signin');
-  // },[userInfo, navigate]);
   
   return (
     <Layout>
@@ -84,10 +86,10 @@ export default function Profile() {
                         ref={fileRef} 
                         accept='image/*'
                         name='avatar'
-                        onChange={handleChange}
+                        onChange={handleChangeImage}
                       />
                       <img 
-                        src={!imageForDisplay ? (userInfo?.data?.avatar) : (imageForDisplay)} 
+                        src={!imageForDisplay ? (avatar) : (imageForDisplay)} 
                         alt="Avatar" 
                         onClick={() => fileRef.current.click()}
                         className=' w-1/3 mx-auto cursor-pointer rounded-full hover:shadow-lg shadow-md hover:border-2 border-gray-300'
@@ -104,9 +106,9 @@ export default function Profile() {
                         className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                         placeholder="Username"
                         style={{ transition: "all .15s ease" }}
-                        defaultValue={userInfo?.data?.username}
-                        id="username"
-                        onChange={handleChange}
+                        value={username}
+                        name="username"
+                        onChange={(e) => setUsername(e.target.value)}
                         autoComplete='username'
                       />
                     </div>
@@ -122,9 +124,9 @@ export default function Profile() {
                         className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                         style={{ transition: "all .15s ease" }}
                         placeholder="Email"
-                        defaultValue={userInfo?.data?.email}
-                        id="email"
-                        onChange={handleChange}
+                        value={email}
+                        name="email"
+                        onChange={(e) => setEmail(e.target.value)}
                         autoComplete='email'
                       />
                     </div>
@@ -140,9 +142,9 @@ export default function Profile() {
                         className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                         style={{ transition: "all .15s ease" }}
                         placeholder="Phone number"
-                        defaultValue={userInfo?.data?.phone}
-                        id='phone'
-                        onChange={handleChange}
+                        value={phone}
+                        name='phone'
+                        onChange={(e) => setPhone(e.target.value)}
                         autoComplete='numder'/>
                     </div>
                     {/* Current Password */}
@@ -157,8 +159,7 @@ export default function Profile() {
                         className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                         placeholder="Current Password"
                         style={{ transition: "all .15s ease" }}
-                        id='currentPassword'
-                        onChange={handleChange}
+                        name='currentPassword'
                         autoComplete='current-password'/>
                         <span
                           onClick={togglePassword}
@@ -178,8 +179,7 @@ export default function Profile() {
                         className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:ring w-full"
                         placeholder="New Password"
                         style={{ transition: "all .15s ease" }}
-                        id='newPassword'
-                        onChange={handleChange}
+                        name='newPassword'
                         autoComplete='new-password' />
                     </div>
                     {/* Submit button */}
