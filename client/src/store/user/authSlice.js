@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { persistState, getStateFromStorage } from '../../utils/localStorage.js';
 
 const initialState = {
-  // from mern-typescript-main
   userInfo: getStateFromStorage('userInfo') || null,
   accessToken: null,
   refreshToken: null,
