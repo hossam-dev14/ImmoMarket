@@ -24,13 +24,11 @@ dotenv.config();
 connectMongoDB();
 
 // Enable CORS for all routes
-// app.use(cors({ origin: '*' }));
 const corsOptions = {
-  origin: 'http://localhost:3000', // Replace with your frontend origin
+  origin: '*', // Replace with your frontend origin
   credentials: true,
 };
 app.use(cors(corsOptions));
-
 
 // Middleware
 app.use(express.json());
