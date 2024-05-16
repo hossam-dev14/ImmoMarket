@@ -29,7 +29,7 @@ export default function Properties() {
   return (
     <Layout>
       <section className="text-gray-600 body-font">
-        <div className="container px-5 py-24 mx-auto">
+        <div className="container px-5 py-16 mx-auto">
           <div className="flex flex-col items-center text-center w-full mb-20 bg-slate-300 pt-16 rounded-md shadow-lg">
             <strong className="text-secondary sm:text-4xl text-3xl font-medium title-font mb-2">
               Properties
@@ -40,9 +40,9 @@ export default function Properties() {
               <Search setSearchTerm={setSearchTerm} /> {/* Pass setSearchTerm to the Search component */}
             </div>
           </div>
-          
+
           { loading ? 
-          (<div className='flex items-center justify-center text-center h-3/4 w-screen'>
+          (<div className='flex justify-center text-center w-full'>
             <BeatLoader
               color="#064862"
               size={20} 
