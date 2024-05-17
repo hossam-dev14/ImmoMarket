@@ -5,7 +5,7 @@ import {
 import { getStateFromStorage } from '../../utils/localStorage.js';
 
 const baseQuery = fetchBaseQuery({ 
-  baseUrl: 'https://immomarket.onrender.com/api',
+  baseUrl: 'http://localhost:8080/api',
   prepareHeaders: (headers) => {
     const accessToken = getStateFromStorage('userInfo')?.accessToken;
     if (accessToken) {
@@ -35,23 +35,14 @@ export const usersApi = createApi({
         url: `${AUTH_URL}/signin`,
         method: 'POST',
         body: data,
-
       }),
     }),
-
-    refreshToken: builder.mutation({
-      query: () => ({
-        url: `${AUTH_URL}/refresh-token`,
-        method: 'POST',
-        body: {refreshToken: getStateFromStorage('userInfo')?.refreshToken},
-      }),
-    }),
-
+    
     signOutUser: builder.mutation({
       query: () => ({
         url: `${AUTH_URL}/signout`,
         method: 'POST',
-      }),
+      })
     }),
     
     updateUser: builder.mutation({
@@ -59,6 +50,14 @@ export const usersApi = createApi({
         url: `${USER_URL}/profile`,
         method: 'PUT',
         body: data,
+        credentials: 'include', // Use 'include' to send cookies along with the request if you're using sessions
+      }),
+    }),
+    
+    getAllUser: builder.query({
+      query: () => ({
+        url: `${USER_URL}/`,
+        method: 'GET',
       }),
     }),
     
@@ -68,12 +67,14 @@ export const usersApi = createApi({
       queryApi.getState().baseQuery.body = formData;
     },
 
-    getAllUser: builder.query({
+    refreshToken: builder.mutation({
       query: () => ({
-        url: `${USER_URL}/`,
-        method: 'GET',
+        url: `${AUTH_URL}/refresh-token`,
+        method: 'POST',
+        body: {refreshToken: getStateFromStorage('userInfo')?.refreshToken},
       }),
     }),
+
 
   }),
 });
