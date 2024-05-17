@@ -5,7 +5,8 @@ import {
 import { getStateFromStorage } from '../../utils/localStorage.js';
 
 const baseQuery = fetchBaseQuery({ 
-  baseUrl: 'http://localhost:8080/api',
+  // baseUrl: 'http://localhost:8080/api',
+  baseUrl: 'https://immomarket-api.vercel.app/api',
   prepareHeaders: (headers) => {
     const accessToken = getStateFromStorage('userInfo')?.accessToken;
     if (accessToken) {
