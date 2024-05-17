@@ -25,7 +25,7 @@ connectMongoDB();
 
 // Enable CORS for all routes
 const corsOptions = {
-  origin: 'https://https://immomarket.vercel.app/', // Replace with your frontend origin
+  origin: 'https://immomarket.vercel.app', // Replace with your frontend origin
   credentials: true,
 };
 app.use(cors(corsOptions));
