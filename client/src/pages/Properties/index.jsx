@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import Layout from "../../Layout";
-import { toast } from 'react-toastify';
-// import { AiFillPlusCircle } from 'react-icons/ai';
-import PropertyCard from '../../components/PropertyCard';
-import BeatLoader from 'react-spinners/BeatLoader';
-import Search from '../../components/Search';
-import api from '../../utils/api';
+import BeatLoader from "react-spinners/BeatLoader";
+import Search from "../../components/Search";
+import api from "../../utils/api";
+import PropertyCard from "../../components/PropertyCard";
 
 export default function Properties() {
   const [properties, setProperties] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const getProperties = async () => {
       try {
-        const res = await api.get(`/properties/all`, {params: {search: searchTerm}});
+        const res = await api.get(`/properties/all`, {
+          params: { search: searchTerm },
+        });
         setProperties(res.data);
         setLoading(false);
       } catch (error) {
@@ -34,37 +34,42 @@ export default function Properties() {
             <strong className="text-secondary sm:text-4xl text-3xl font-medium title-font mb-2">
               Properties
             </strong>
-            <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Find your house dream!</p>
+            <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
+              Find your house dream!
+            </p>
             {/* <Search /> */}
-            <div className='w-4/5 max-w-[30rem] min-w-72 mt-8 mb-16'>
-              <Search setSearchTerm={setSearchTerm} /> {/* Pass setSearchTerm to the Search component */}
+            <div className="w-4/5 max-w-[30rem] min-w-72 mt-8 mb-16">
+              <Search setSearchTerm={setSearchTerm} />{" "}
+              {/* Pass setSearchTerm to the Search component */}
             </div>
           </div>
 
-          { loading ? 
-          (<div className='flex justify-center text-center w-full'>
-            <BeatLoader
-              color="#064862"
-              size={20} 
-              aria-label="Loading..."
-              data-testid="loader"
-            />
-          </div>
-          ) : properties ? (
-            <div>
-              <div className="flex flex-wrap justify-center gap-8">
-                {properties.map((prop, i) => (
-                  <PropertyCard propsCard={prop} key={i} />
-                ))}
-              </div>
+          {loading ? (
+            <div className="flex justify-center text-center w-full">
+              <BeatLoader
+                color="#064862"
+                size={17}
+                aria-label="Loading..."
+                data-testid="loader"
+              />
             </div>
-          ) : ( 
-            <p className='text-2xl text-center text-gray-400 font-bold'>
+          ) : properties ? (
+            <div className="flex flex-wrap justify-center gap-8">
+              {properties.map((property) => (
+                <PropertyCard
+                  propsCard={property}
+                  key={property.id}
+                  largCard="sm:w-4/5 md:w-2/5 lg:w-1/4"
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-2xl text-center text-gray-400 font-bold">
               Properties not found
             </p>
           )}
         </div>
       </section>
     </Layout>
-  )
+  );
 }
