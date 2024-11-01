@@ -4,6 +4,7 @@ import bgImg from "/src/assets/images/bg.png";
 // import Search from "../../components/Search";
 // import api from "../../utils/api";
 import LatestProperties from "../../components/LatestProperties";
+import PopularProperties from "../../components/PopularProperties";
 
 export default function Home() {
   // const [properties, setProperties] = useState(null);
@@ -55,7 +56,7 @@ export default function Home() {
 
         <div className="pt- px-4 md:px-10 pb-10 my-16">
           {/* Popular Propereties */}
-          <LatestProperties sectionTitle="Popular Properties" />
+          <PopularProperties sectionTitle="Popular Properties" />
         </div>
       </main>
     </Layout>
@@ -64,7 +65,6 @@ export default function Home() {
 
 /** 
   _Search: Buy/Rent , I'm looking to (buy Apartments), Location(Berlin, Germany), Price Range($10,0000-$200,000) 
-
   _Buy, Rent & Sell 
   _Why Choose Us
   _Meet Our Agents 
