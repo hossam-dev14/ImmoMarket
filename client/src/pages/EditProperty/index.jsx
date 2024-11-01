@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Layout from "../../Layout/DashLayout";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import api from '../../utils/api';
@@ -55,8 +55,7 @@ export default function EditProperty() {
       });
     }
   };
-  console.log(formData)
-
+  
   const handleEditProperty = async (e) => {
     e.preventDefault();
     try {
@@ -73,8 +72,6 @@ export default function EditProperty() {
         imageUrl: formData.imageUrl,        
         ownerId: userInfo.data._id
       };
-      console.log(propertyData)
-      console.log(formData.imageUrl);
 
       const res = await api.put(`/properties/update/${params.propertyId}`,
       propertyData, {
