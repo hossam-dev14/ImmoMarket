@@ -52,6 +52,15 @@ export default function Home() {
         <div className="pt- px-4 md:px-10 pb-10 my-16">
           {/* Recent Propereties */}
           <LatestProperties sectionTitle="Recent Properties" />
+          {/* View all */}
+          {/* <div className="flex justify-center items-center mt-12">
+            <a
+              href="/properties"
+              className="text-lg font-semibold text-white hover:text-secondary  transition duration-300 bg-secondary hover:bg-white py-2 px-3 rounded-md shadow-lg"
+            >
+              View all properties
+            </a>
+          </div> */}
         </div>
 
         <div className="pt- px-4 md:px-10 pb-10 my-16">

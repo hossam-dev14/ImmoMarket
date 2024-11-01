@@ -35,15 +35,6 @@ export default function LatestProperties({ sectionTitle }) {
       ) : (
         <PropertyListComponent properties={properties} />
       )}
-      {/* View all */}
-      <div className="flex justify-center items-center mt-12">
-        <a
-          href="/properties"
-          className="text-lg font-semibold text-white hover:text-secondary  transition duration-300 bg-secondary hover:bg-white py-2 px-3 rounded-md shadow-lg"
-        >
-          View all properties
-        </a>
-      </div>
     </section>
   );
 }
